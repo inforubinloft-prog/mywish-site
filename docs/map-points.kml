@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>MyWish — три площадки</name>
+    <Placemark>
+      <name>1. MyWish</name>
+      <description>Кожевенная линия, 34А · м. Горный институт
+Залы: Фламинго, Вайт, Блэк</description>
+      <Point>
+        <coordinates>30.243829,59.923284,0</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>2. MyWish</name>
+      <description>Профессора Качалова, 8И · м. Площадь Александра Невского
+Залы: Барби, Сицилия, Оушен Драйв</description>
+      <Point>
+        <coordinates>30.398837,59.915098,0</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>3. MyWish</name>
+      <description>Профессора Качалова, 15А · м. Площадь Александра Невского
+Залы: Леонардо, Санта Лючия, Рубин Холл</description>
+      <Point>
+        <coordinates>30.384616,59.908394,0</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

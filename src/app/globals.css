@@ -1,0 +1,2990 @@
+@import "tailwindcss";
+/* Страница залов — отдельным файлом: она большая и к главной отношения не имеет. */
+@import "./halls.css";
+
+/* ─────────────────────────────────────────────────────────────
+   MyWish — дизайн-система
+   Источник: Figma To8XYwi7daHOnQlk0nnNPG, нода 914:193 (Frame 86, 1440 × 10859).
+   Variables в файле не заданы — токены собраны из значений слоёв
+   после нормализации (см. docs/report.md).
+
+   МАСШТАБИРОВАНИЕ
+   Весь макет тянется за шириной окна: 1rem = 16px при 1440px.
+   Поэтому любая величина из Figma пишется как <px>/16 rem, а Tailwind
+   настроен так, что числовые утилиты — это прямо пиксели макета:
+   --spacing: 0.0625rem → w-325 = 325px макета, top-1052 = 1052px макета.
+
+   Масштаб берёт меньшее из двух: ширину окна и его высоту.
+
+   За ширину отвечает 1440 из макета, за высоту — 940: это высота самой
+   высокой из ключевых секций («Выбери пакет»; «Выбери дату» 914 и форма 917
+   чуть ниже). Тогда любая из них целиком помещается в окно от заголовка до
+   нижнего края — ради этого масштаб на 1440×900 и опускается до 0.96.
+   Считать по ширине одной нельзя: на 27" карточки переставали влезать,
+   а до этого на 4K макет занимал меньше половины экрана.
+
+   «Как выглядит праздник» (1125) и REELS (867) в это правило не входят:
+   это ленты фотографий, их листают, а не читают одним экраном.
+
+   Снизу 1024 (0.71), сверху 3.0 — дальше расти незачем.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  font-size: clamp(11.378px, min(1.11111vw, 1.70213vh), 48px);
+}
+
+@theme {
+  /* 1 единица Tailwind = 1px макета */
+  --spacing: 0.0625rem;
+
+  /* Цвета */
+  --color-primary: #db404f;
+  --color-primary-hover: #c73543;
+  --color-primary-pressed: #a92b37;
+  --color-blush: #fce1e3;
+  --color-navy: #0e1736;
+  --color-page: #fff9f7;
+  --color-surface: #ffffff;
+  --color-surface-alt: #fff1f2;
+  --color-border-soft: #d8c5c7;
+  --color-muted: #75676c;
+  --color-frame: #7c2c32;
+
+  /* Текст: три уровня вместо двенадцати прозрачностей */
+  --color-ink: #0e1736;
+  --color-ink-secondary: rgb(14 23 54 / 0.72);
+  --color-ink-muted: rgb(14 23 54 / 0.64);
+
+  /* Типографика */
+  --font-display:
+    var(--font-fira), "Fira Sans Condensed", "Arial Narrow", system-ui,
+    sans-serif;
+  --font-sans:
+    var(--font-manrope), "Segoe UI", system-ui, "Helvetica Neue", Arial,
+    sans-serif;
+  --font-script: var(--font-pinyon), "Segoe Script", cursive;
+
+  /* Шкала кеглей: Fira Sans EC Black, трекинг 4% */
+  --text-d-xl: 4.875rem; /* 78 */
+  --text-d-xl--line-height: 4.375rem; /* 70 */
+  --text-d-l: 3.75rem; /* 60 */
+  --text-d-l--line-height: 3.125rem; /* 50 */
+  --text-d-m: 2.8125rem; /* 45 */
+  --text-d-m--line-height: 2.8125rem; /* 45 */
+  --text-d-s: 1.875rem; /* 30 */
+  --text-d-s--line-height: 3.125rem; /* 50 */
+
+  /* Шкала кеглей: Manrope */
+  --text-xl: 1.5625rem; /* 25 */
+  --text-xl--line-height: 2rem; /* 32 */
+  --text-l: 1.1875rem; /* 19 */
+  --text-l--line-height: 1.75rem; /* 28 */
+  --text-m: 0.9375rem; /* 15 */
+  --text-m--line-height: 1.5rem; /* 24 */
+  --text-s: 0.75rem; /* 12 */
+  --text-s--line-height: 1.125rem; /* 18 */
+
+  /* Hero — собственная шкала: блок вставлен в макет в масштабе 2.545 */
+  --text-hero: 4.3125rem; /* 69 */
+  --text-hero--line-height: 3.8281rem; /* 61.25 */
+  --text-hero-lede: 1.5rem; /* 24 */
+  --text-hero-lede--line-height: 2.0625rem; /* 33 */
+  --text-btn: 1.4375rem; /* 23 */
+  --text-btn--line-height: 1.4844rem; /* 23.75 */
+
+  /* Радиусы */
+  --radius-xs: 0.25rem; /* 4 */
+  --radius-sm: 0.5rem; /* 8 */
+  --radius-md: 1rem; /* 16 */
+  --radius-lg: 1.5rem; /* 24 */
+  --radius-card: 1.75rem; /* 28 */
+  --radius-pill: 62.4375rem;
+
+  /* Кривые движения: сильный ease-out для появления, back-out для «пузырей» */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Тени макета */
+  --shadow-cta: 0 1.1875rem 1.6875rem rgb(28 17 23 / 0.24);
+  --shadow-card: 0 0.4725rem 1.4181rem rgb(67 38 50 / 0.04);
+  --shadow-card-lg: 0 0.851rem 2.0813rem rgb(67 38 50 / 0.09);
+  --shadow-soft: 0 0.3306rem 0.8513rem rgb(23 21 29 / 0.08);
+}
+
+/* ── Каркас страницы ────────────────────────────────────────── */
+
+body {
+  background: var(--color-blush);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overflow-x: auto;
+}
+
+/*
+  От 1024 страница по ширине точно помещается, поэтому обрезаем
+  горизонтальное переполнение: это позволяет тянуть художественные подложки
+  во всю ширину окна (100vw шире клиентской области на ширину полосы
+  прокрутки). Ниже 1024 оставляем скролл — там сцена шире окна.
+*/
+@media (min-width: 1024px) {
+  body {
+    overflow-x: clip;
+  }
+}
+
+/*
+  Сцена — холст 1440px из Figma. За счёт rem она равна ширине окна
+  в диапазоне 1024…1728 и центрируется на мониторах шире.
+*/
+.stage {
+  position: relative;
+  width: 90rem;
+  margin-inline: auto;
+}
+
+/*
+  Переходы по якорям — плавные: и меню в шапке, и ссылки из карточек пакетов
+  уводят к секции выше, а мгновенный прыжок через полстраницы стирает
+  ощущение, что это одна страница.
+
+  scroll-margin — чтобы верх секции не оказался под плавающей шапкой: она
+  108 макетных px высотой, плюс воздух.
+*/
+html {
+  scroll-behavior: smooth;
+  /*
+    Подмагничивание ключевых блоков. proximity, а не mandatory: обязательное
+    притягивание превратило бы страницу в листалку по экранам — прокрутка
+    перестала бы останавливаться там, где человек её остановил. proximity
+    ловит только близкие остановки, всё остальное браузер оставляет как есть.
+
+    Целями назначены четыре шага (см. .u-snap ниже) — там, где важно видеть
+    блок целиком. Промежуточные разделы не притягиваются: они читаются
+    подряд, и «прилипание» посреди чтения раздражает.
+  */
+  scroll-snap-type: y proximity;
+}
+
+/*
+  Точка притяжения — тот же верх, что и у перехода по якорю: она отсчитывается
+  от коробки блока с учётом его scroll-margin-top.
+*/
+.u-snap {
+  scroll-snap-align: start;
+  /*
+    Останавливаться внутри длинного блока можно свободно: без stop притяжение
+    работает как подсказка, а не как преграда.
+  */
+  scroll-snap-stop: normal;
+}
+
+[data-section],
+.u-cta-band {
+  scroll-margin-top: 8.25rem;
+}
+
+/*
+  Домики выше остальных секций и рассчитаны на один экран. Универсальный
+  отступ 132 макетных px оставлял нижние этажи и CTA за краем невысокого
+  viewport. Для залов используем ту же безопасную границу, что и видеопереход
+  из Hero: заголовок не прячется под шапкой, а весь выбор остаётся в кадре.
+*/
+/*
+  Посадка ключевых шагов — одна на все четыре.
+
+  Прежние значения были разными и оба раза мимо: 8 и 48 прятали заголовок под
+  плавающую шапку, 132 оставляли сверху пустую полосу, а низ блока — с итогом
+  или кнопкой отправки — уходил за нижний край.
+
+  72 — это низ шапки (её логотип занимает 20…89) плюс воздух. Считаем по шапке,
+  а не по «красиво»: к блокам приходят и прокруткой вверх, когда она на экране.
+*/
+#halls,
+#packages,
+#price,
+#contact {
+  scroll-margin-top: 4.5rem;
+}
+
+/*
+  Стык первого экрана со сценой. Видео обрывалось по нижнему краю кадра, и на
+  прокрутке был виден резкий шов: тёмная картинка встык с розовым фоном
+  страницы. Полоса внизу hero растворяет кадр в цвет страницы — той же ширины
+  и на том же слое, что видео, поэтому шов пропадает при любой высоте окна.
+
+  Лежит над видео, но под интерфейсом первого экрана: заголовок и кнопки
+  стоят выше и не притушены.
+*/
+.hero-seam {
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  height: 8.75rem;
+  background: linear-gradient(
+    to bottom,
+    rgb(252 225 227 / 0) 0%,
+    rgb(252 225 227 / 0.28) 42%,
+    rgb(252 225 227 / 0.72) 74%,
+    var(--color-blush) 100%
+  );
+  /*
+    Полоса приходит вместе с боковой заливкой, а не стоит с самого начала:
+    обе розовые, и врозь они читаются как две разные затеи. Длительность
+    равна ходу заливки (380мс), чтобы они закончили вместе.
+  */
+  opacity: 0;
+  transition: opacity 380ms var(--ease-out);
+}
+
+.hero-seam[data-shown="true"] {
+  opacity: 1;
+}
+
+/*
+  Появление блоков при прокрутке. Признак [data-reveal] расставляет
+  ScrollReveal, [data-revealed] добавляет наблюдатель, когда блок вошёл в кадр.
+
+  Прячем только opacity: движение живёт в самих кадрах анимации. Заливка
+  backwards держит нулевой кадр во время задержки, а после конца свойства
+  отпускаются — иначе застывший translate перебил бы подъём на наведении
+  у карточек и кнопок.
+
+  Сдвиг задан через translate, а не transform: у стикеров в разметке стоит
+  свой transform с поворотом, и они появлялись бы уже расповёрнутыми.
+*/
+[data-reveal]:not([data-revealed]) {
+  opacity: 0;
+}
+
+[data-reveal][data-revealed] {
+  animation: reveal-in 640ms var(--ease-out) var(--reveal-delay, 0ms) backwards;
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    translate: 0 1.25rem;
+  }
+}
+
+/*
+  Hero → halls: на десктопе hero фиксируется, а canvas поверх него меняет кадры
+  по прогрессу скролла. Финальный кадр совпадает с первым экраном сцены ниже,
+  поэтому сцена может лежать под sticky-слоем без отдельного монтажного стыка.
+*/
+.hero-halls-scene {
+  position: relative;
+  height: 100svh;
+}
+
+.hero-halls-sticky {
+  position: relative;
+  height: 100svh;
+  overflow: clip;
+  will-change: opacity;
+}
+
+.hero-interface-layer {
+  z-index: 20;
+  transform-origin: center center;
+  will-change: opacity, transform, filter;
+}
+
+.floating-site-header {
+  pointer-events: none;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: none;
+  height: 6.75rem;
+  opacity: 0;
+  transform: translate3d(0, -115%, 0);
+  /*
+    Шапку теперь вызывает наведение, а не прокрутка, и ход стал спокойнее:
+    360мс на выезд вместо 260 и такая же плавность на уходе. Резкое движение у
+    самого края экрана читается как рывок страницы, а не как появление меню.
+  */
+  transition:
+    transform 360ms var(--ease-drawer),
+    opacity 240ms var(--ease-out);
+  will-change: transform, opacity;
+}
+
+/*
+  --dock — сдвиг вниз на последних 17 макетных px прокрутки, когда шапка
+  приезжает на место статической в первом экране. Его ведёт прокрутка, поэтому
+  на это время переход по transform снимается: иначе шапка отставала бы от
+  страницы на 260мс. По умолчанию 0, то есть обычное поведение не меняется.
+*/
+.floating-site-header[data-visible="true"] {
+  opacity: 1;
+  transform: translate3d(0, var(--dock, 0px), 0);
+}
+
+.floating-site-header[data-docking="true"] {
+  transition: opacity 160ms var(--ease-out);
+}
+
+.floating-site-header[data-visible="true"] a {
+  pointer-events: auto;
+}
+
+/*
+  Шапка на тёмном фоне. Логотип — сплошная заливка #0E1736 с прозрачностью,
+  поэтому белая версия делается фильтром, а не вторым файлом: brightness(0)
+  гасит цвет в чёрный, invert(1) переводит его в белый, альфа не трогается.
+
+  Плашки Telegram и MAX становятся плотными: значок телеграма наполовину
+  нарисован тем же тёмным цветом и на просвечивающей подложке пропадал.
+
+  Базовые значения заданы здесь же, а не утилитами в разметке: утилиты Tailwind
+  сильнее @layer components, и подложка бы не поменялась (та же грабля, что у
+  .u-cta-band ниже).
+*/
+/*
+  Подложка под шапкой.
+
+  Ради неё же перекраска и осталась: подложка берёт тон схемы, а не один цвет
+  на все случаи. Светлая на светлом, тёмная на синей полосе — иначе над полосой
+  менеджера светлая плашка вырезала бы из тёмной секции белый прямоугольник.
+
+  Книзу и тон, и размытие сходят на нет через маску: сплошная полоса с резким
+  нижним краем читалась бы как вторая шапка поверх страницы, а так это мягкое
+  затенение. Растушёвка уходит на 28px ниже полосы, поэтому граница не видна.
+
+  Над первым экраном подложки нет: там кадр выстроен, и затенять его верх
+  нечем — шапка в этом месте и так носит прозрачные плашки макета.
+*/
+.floating-header-scrim {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: -1.75rem;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    to bottom,
+    rgb(252 225 227 / 0.92),
+    rgb(252 225 227 / 0.66)
+  );
+  backdrop-filter: blur(0.625rem);
+  -webkit-backdrop-filter: blur(0.625rem);
+  mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
+  transition:
+    opacity 220ms var(--ease-out),
+    background 220ms var(--ease-out);
+}
+
+.floating-site-header[data-over="light"] .floating-header-scrim,
+.floating-site-header[data-over="dark"] .floating-header-scrim {
+  opacity: 1;
+}
+
+.floating-site-header[data-over="dark"] .floating-header-scrim {
+  background: linear-gradient(
+    to bottom,
+    rgb(14 23 54 / 0.92),
+    rgb(14 23 54 / 0.6)
+  );
+}
+
+/*
+  Отклик логотипа. Знак — картинка, перекрасить её нечем, поэтому поверх
+  лежит слой брендового красного, вырезанный по её же силуэту маской: сам
+  файл одноцветный (тёмно-синий с прозрачным фоном), так что маска повторяет
+  знак точно. На наведении слой проявляется, знак приподнимается — тот же
+  подъём на 2px, что у соцсетей и кнопок рядом, чтобы отклик читался как
+  общий язык шапки, а не как отдельный приём.
+*/
+.site-header-home {
+  position: relative;
+  display: block;
+  height: 100%;
+  translate: 0 0;
+  transition: translate 200ms var(--ease-out);
+}
+
+.site-header-home::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-primary);
+  -webkit-mask-image: url("/figma/1-hero/logo.webp");
+  mask-image: url("/figma/1-hero/logo.webp");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .site-header-home:hover {
+    translate: 0 -0.125rem;
+  }
+  .site-header-home:hover::after {
+    opacity: 1;
+  }
+}
+
+.site-header-home:focus-visible::after {
+  opacity: 1;
+}
+
+.floating-header-logo {
+  transition: filter 220ms var(--ease-out);
+}
+.floating-site-header[data-over="dark"] .floating-header-logo {
+  filter: brightness(0) invert(1);
+}
+
+.floating-header-chip {
+  background-color: rgb(255 249 247 / 0.34);
+  border-color: rgb(255 255 255 / 0.62);
+  transition:
+    background-color 220ms var(--ease-out),
+    border-color 220ms var(--ease-out),
+    box-shadow 200ms var(--ease-out),
+    translate 200ms var(--ease-out);
+}
+.floating-site-header[data-over="dark"] .floating-header-chip {
+  background-color: rgb(255 249 247 / 0.92);
+}
+@media (hover: hover) and (pointer: fine) {
+  .floating-header-chip:hover {
+    background-color: var(--color-surface);
+  }
+}
+
+.floating-header-nav {
+  background-color: rgb(252 225 227 / 0.9);
+  transition: background-color 220ms var(--ease-out);
+}
+.floating-header-nav-ring {
+  inset: -0.0672rem;
+  border: 0.1345rem solid rgb(255 255 255 / 0.64);
+  transition: border-color 220ms var(--ease-out);
+}
+
+/*
+  Над первым экраном плавающая шапка надевает вид статической: там она стоит
+  на видео, и плашки в макете сделаны заметно прозрачнее. Значения — ровно те,
+  что стоят в разметке Hero. Это нужно для передачи: в точке подмены обе шапки
+  должны совпасть не только положением, но и плотностью пилюль.
+*/
+.floating-site-header[data-over="hero"] .floating-header-chip {
+  background-color: rgb(255 249 247 / 0.07);
+  border-color: rgb(255 241 242 / 0.14);
+}
+.floating-site-header[data-over="hero"] .floating-header-nav {
+  background-color: rgb(252 225 227 / 0.72);
+}
+.floating-site-header[data-over="hero"] .floating-header-nav-ring {
+  border-color: rgb(255 255 255 / 0.5);
+}
+
+/*
+  Пока шапка на экране, статическая в hero спрятана: иначе на первых ~100px
+  хода, пока шапка hero ещё не ушла за верхний край, обе видны внахлёст.
+  visibility, а не opacity, — она же снимает и наведение, и фокус, и не спорит
+  с собственным сценарием выезда hero, который правит transform и opacity.
+*/
+:root[data-header-owner="floating"] .hero-static-header {
+  visibility: hidden;
+}
+
+/*
+  Номер телефона. Текст белый, а не блёклый blush из .u-cta: цифры читают,
+  а не узнают по силуэту, и на синем нужен полный контраст.
+
+  На тёмном фоне тёмно-синяя пилюля сливается с подложкой, поэтому там она
+  краснеет. Правила лежат вне слоёв — так они перекрывают и .u-cta, и утилиты.
+*/
+.u-header-phone {
+  color: var(--color-surface);
+  background-color: var(--color-navy);
+  transition:
+    background-color 220ms var(--ease-out),
+    color 220ms var(--ease-out),
+    translate 200ms var(--ease-out);
+}
+.floating-site-header[data-over="dark"] .u-header-phone {
+  background-color: var(--color-primary);
+}
+@media (hover: hover) and (pointer: fine) {
+  .u-header-phone:hover {
+    background-color: var(--color-primary);
+  }
+  .floating-site-header[data-over="dark"] .u-header-phone:hover {
+    background-color: var(--color-primary-hover);
+  }
+}
+
+@media (min-width: 1024px) {
+  .floating-site-header {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-site-header {
+    transform: none;
+    transition: opacity 120ms ease-out;
+  }
+}
+
+.hero-halls-canvas-layer {
+  pointer-events: none;
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  background: #fce1e3;
+  opacity: 0;
+  visibility: hidden;
+  will-change: opacity, filter;
+}
+
+.hero-halls-canvas-layer[data-playing="true"] {
+  position: fixed;
+  visibility: visible;
+  opacity: 1;
+}
+
+.hero-halls-transition-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.halls-interface-layer,
+.halls-houses-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.halls-interface-layer {
+  z-index: 3;
+  pointer-events: none;
+  transform-origin: top center;
+  will-change: opacity, transform, filter;
+}
+
+.halls-houses-layer {
+  z-index: 1;
+  transform-origin: top center;
+  will-change: opacity, transform;
+}
+
+/*
+  Интерактивный «кукольный домик».
+
+  Дом всегда рисуется исходной картинкой. Поверх него лежат девять точных масок
+  реальных проёмов залов. Активная маска проявляет копию тех же пикселей строго
+  в исходном положении: без scale и translate, поэтому балки и стены никогда
+  не расходятся. Та же геометрия используется отдельным SVG-контуром выбора.
+*/
+.hall-house {
+  isolation: isolate;
+}
+
+.hall-house-base {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: fill;
+  pointer-events: none;
+  transition: opacity 180ms var(--ease-out);
+}
+
+.hall-floor-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hall-floor {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  clip-path: var(--hall-floor-clip);
+  pointer-events: auto;
+}
+
+/*
+  Нарисованные состояния зала: наведение, нажатие, выбран.
+
+  Каждое — отдельный кадр всего дома, а не наклейка поверх этажа: состояние
+  подсвечивает выбранный зал, приглушает соседние и меняет боковую табличку,
+  то есть касается всей картинки. Раньше это собиралось из фильтров и
+  самодельной обводки по тем же контурам — читалось слабо, потому что фильтр
+  не умеет ни сменить цвет таблички, ни поставить галочку.
+
+  Кадры лежат стопкой над базой и меняют прозрачность. У дома в один момент
+  включён ровно один — это решает разметка (см. shownState в Halls.tsx).
+*/
+.hall-state {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: fill;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms var(--ease-out);
+}
+
+.hall-state[data-on="true"] {
+  opacity: 1;
+}
+
+/*
+  Кнопка — только зона нажатия, поэтому z-index выше кадров: иначе картинка
+  состояния перехватывала бы курсор и наведение мигало бы.
+*/
+.hall-floor {
+  z-index: 3;
+}
+
+/*
+  Клавиатуре кадры не помогают: она не наводит курсор, а переходит по этажам.
+  Рамку рисуем сами — по тому же контуру, что и зона нажатия.
+*/
+.hall-floor:focus-visible {
+  outline: 0.1875rem solid var(--color-navy);
+  outline-offset: -0.1875rem;
+}
+
+/*
+  Дом, в котором ничего не выбирают, отходит на шаг назад целиком — вместе с
+  крышей и стенами, которые тенями по этажам не накрыть.
+*/
+.halls-section[data-has-active="true"]
+  .hall-house[data-current="false"]
+  .hall-house-base {
+  opacity: 0.7;
+}
+
+/*
+  Соседние контуры слегка перекрываются, чтобы между ними не оставалось
+  волосной щели. В полосе перекрытия курсор должен оставаться у того этажа,
+  на который уже навёл, — иначе на границе подсветка мигает.
+*/
+@media (hover: hover) and (pointer: fine) {
+  .hall-floor[data-preview="true"],
+  .hall-floor:hover,
+  .hall-floor:focus-visible {
+    z-index: 4;
+  }
+}
+
+/*
+  Выполненный шаг.
+
+  Четыре шага — зал, пакет, дата, заявка — закрываются четырьмя действиями, и
+  сделанный шаг отмечается сам: стикер над заголовком сменяется галочкой, а
+  акцентная строка заголовка уходит из розового в тёмно-синий. Розовым на
+  странице зовут к действию — звать по второму разу незачем; гасить шаг
+  целиком тоже нельзя, вернуться и сменить выбор можно в любой момент.
+
+  Признак ставит StepDone.tsx, здесь только вид.
+*/
+[data-step] .u-heading em {
+  transition: color 260ms var(--ease-out);
+}
+
+[data-step][data-done="true"] .u-heading em {
+  color: var(--color-navy);
+}
+
+/*
+  Стикер и галочка стоят на одних координатах и сменяют друг друга. Поворот
+  задан инлайном из макета — он у каждого шага свой, — поэтому двигаем не
+  transform, а прозрачность и scale: они складываются с поворотом, а не
+  перетирают его.
+*/
+/*
+  Момент закрытия шага. Три такта, каждый короткий и по своей оси:
+
+    печать   — галочка приходит с перелётом, как штамп;
+    искры    — восемь точек фирменных цветов разлетаются и гаснут;
+    зов      — стикер следующего шага дважды подпрыгивает.
+
+  Всё это живёт меньше секунды и запускается один раз, по признаку justDone
+  (см. StepDone.tsx): повторять праздник при каждой прокрутке мимо нельзя,
+  из приятного он мгновенно станет назойливым.
+*/
+@keyframes u-step-stamp {
+  0% {
+    scale: 0.5;
+    opacity: 0;
+  }
+  55% {
+    scale: 1.16;
+    opacity: 1;
+  }
+  78% {
+    scale: 0.96;
+  }
+  100% {
+    scale: 1;
+    opacity: 1;
+  }
+}
+
+@keyframes u-step-spark {
+  from {
+    translate: 0 0;
+    scale: 0.4;
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  to {
+    translate: var(--dx) var(--dy);
+    scale: 1;
+    opacity: 0;
+  }
+}
+
+@keyframes u-step-nudge {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  30% {
+    translate: 0 -0.4375rem;
+  }
+  55% {
+    translate: 0 0;
+  }
+  72% {
+    translate: 0 -0.1875rem;
+  }
+}
+
+[data-step][data-just-done] .u-step-check {
+  animation: u-step-stamp 460ms var(--ease-pop) both;
+}
+
+/*
+  Искры лежат в коробке стикера и разлетаются из её центра. Коробка ничего не
+  ловит и не занимает места: это слой поверх заголовка, живущий полсекунды.
+*/
+.u-step-burst {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.u-step-burst i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.375rem;
+  height: 0.375rem;
+  margin: -0.1875rem 0 0 -0.1875rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  opacity: 0;
+}
+
+/* Три фирменных цвета вперемешку — россыпь читается живее одноцветной. */
+.u-step-burst i:nth-child(3n + 2) {
+  background: var(--color-navy);
+}
+.u-step-burst i:nth-child(3n) {
+  width: 0.3125rem;
+  height: 0.3125rem;
+  background: var(--color-blush);
+}
+
+[data-step][data-just-done] .u-step-burst i {
+  animation: u-step-spark 620ms var(--ease-out) both;
+  animation-delay: calc(var(--i) * 18ms);
+}
+
+/* Приглашение в следующий шаг: два подскока и тишина. */
+[data-step][data-invite] .u-step-sticker {
+  animation: u-step-nudge 820ms var(--ease-out) 2;
+}
+
+[data-step] .u-step-check {
+  scale: 0.6;
+  opacity: 0;
+  transition:
+    opacity 260ms var(--ease-out),
+    scale 320ms var(--ease-pop);
+}
+
+[data-step][data-done="true"] .u-step-check {
+  scale: 1;
+  opacity: 1;
+}
+
+/*
+  Прежний стикер уходит. Метим его классом, а не «прямым ребёнком секции»:
+  в блоке залов стикер лежит внутри слоя интерфейса, и селектор по вложенности
+  его не находил — галочка появлялась поверх, а не вместо.
+*/
+.u-step-sticker {
+  opacity: 1;
+  transition: opacity 200ms var(--ease-out);
+}
+
+[data-step][data-done="true"] .u-step-sticker {
+  opacity: 0;
+}
+
+/*
+  Подсказка под заголовком шага: залы, пакеты, дата, заявка.
+
+  Пока курсор ни на чём — правило целиком; под курсором — факт про то, на что
+  навели, и что случится по нажатию. Приём один на все четыре шага, поэтому и
+  стиль общий: акцентный цвет в подсказке и одна строка без переносов.
+
+  Имя с приставкой step- намеренно: класс .u-hint в проекте уже занят плашкой
+  «наш выбор» в калькуляторе, и подсказки получали от неё розовую пилюлю.
+*/
+.u-step-hint {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 180ms ease-out;
+}
+
+.u-step-hint[data-active="true"] {
+  color: var(--color-primary);
+}
+
+.halls-instruction {
+  overflow: hidden;
+  color: var(--color-ink-secondary);
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 180ms ease-out;
+}
+
+.halls-instruction[data-active="true"] {
+  color: var(--color-primary);
+}
+
+.halls-actions {
+  z-index: 5;
+  display: grid;
+  /*
+    Кнопка одна и стоит по центру полосы. Раньше колонок было две: рядом
+    появлялась «Дальше: пакет», и «Все залы» ради неё съезжала вбок.
+  */
+  grid-template-columns: 13.1875rem;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.halls-action {
+  position: relative;
+  width: 13.1875rem;
+  height: 2.8125rem;
+  font-size: 1.25rem;
+  line-height: 1.625rem;
+  white-space: nowrap;
+}
+
+.halls-all {
+  position: relative;
+}
+
+.halls-action-all {
+  position: relative;
+  z-index: 2;
+}
+
+/*
+  Отклик кнопки. Раньше цвета стояли утилитами прямо в разметке и при
+  переработке секции пропали — осталось только слабое затемнение из .u-cta,
+  которого на красной пилюле почти не видно. Держим их здесь, рядом с
+  наведением: тёмно-синий на красном — та же пара, что у кнопок первого
+  экрана, так что это не новый приём, а уже принятый на сайте.
+*/
+@media (hover: hover) and (pointer: fine) {
+  .halls-all:hover .halls-action-all,
+  .halls-action-all:focus-visible {
+    background-color: var(--color-navy);
+    color: var(--color-surface);
+    translate: 0 -0.125rem;
+  }
+}
+
+/* ── Веер живых фотографий под кнопкой «Все залы» ────────────── */
+
+/*
+  Девять заглавных снимков раскрываются из-под кнопки, как карты в руке.
+  Смысл прикладной: показать, что за надписью настоящие фотографии залов,
+  а не список названий.
+
+  Стопка стоит в одной точке под кнопкой и разъезжается поворотом вокруг
+  точки ниже себя — так карты и веерятся. Двигаются только rotate, translate,
+  scale и opacity: ничего, что заставляет пересчитывать раскладку.
+*/
+.halls-fan {
+  position: absolute;
+  bottom: 1.75rem;
+  left: 50%;
+  width: 0;
+  height: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.halls-fan img {
+  position: absolute;
+  bottom: 0;
+  left: -2.5rem;
+  width: 5rem;
+  /*
+    Обёртка веера намеренно нулевой ширины — она только точка отсчёта. Но
+    сброс Tailwind держит на всех картинках max-width: 100%, а сто процентов
+    от нуля — это ноль: карточки схлопывались в трёхпиксельную точку из
+    собственной белой рамки. Снимаем потолок поимённо.
+  */
+  max-width: none;
+  aspect-ratio: 5 / 7;
+  border-radius: 0.5rem;
+  border: 0.125rem solid var(--color-surface);
+  object-fit: cover;
+  box-shadow: 0 0.5rem 1.25rem rgb(28 17 23 / 0.28);
+  /* Ось вращения — ниже веера: оттуда карточки и расходятся, как в руке. */
+  transform-origin: 50% 215%;
+  /*
+    --mid — расстояние до середины ряда, без знака: по нему идёт и порядок
+    наложения, и очередь раскрытия.
+
+    abs() поддержан не везде, поэтому берём его через max(): из числа и того
+    же числа с обратным знаком больше всегда неотрицательное.
+  */
+  --mid: max(calc(var(--i) - 4), calc(4 - var(--i)));
+  rotate: 0deg;
+  translate: 0 0;
+  scale: 0.6;
+  opacity: 0;
+  transition:
+    rotate 420ms var(--ease-pop),
+    translate 420ms var(--ease-pop),
+    scale 320ms var(--ease-out),
+    opacity 220ms var(--ease-out);
+  /* Ближе к центру — выше в стопке, чтобы веер читался от середины. */
+  z-index: calc(9 - var(--mid));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .halls-all:hover .halls-fan img,
+  .halls-all:has(.halls-action-all:focus-visible) .halls-fan img {
+    rotate: calc((var(--i) - 4) * 9.5deg);
+    translate: 0 -1.5rem;
+    scale: 1;
+    opacity: 1;
+    /* Раскрывается от середины к краям — как разводят карты большим пальцем. */
+    transition-delay: calc(var(--mid) * 34ms);
+  }
+}
+
+/*
+  Секция: блок нормальной высоты из макета, дети внутри — на координатах Figma.
+  Вертикальный ритм между секциями — 96px (--gap-section в макете).
+*/
+@utility section-gap {
+  margin-top: 6rem;
+}
+
+/*
+  Слой сплошных подложек. В макете они шире кадра (от −143 до 1746), то есть
+  задуманы «на вылет», поэтому тянутся на всю ширину окна, а не по сцене.
+  По вертикали координаты те же, что у сцены.
+*/
+.decor-bleed {
+  position: absolute;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  height: 100%;
+  overflow: hidden;
+}
+
+/*
+  Подложка растёт вместе с окном, а не догоняет его край.
+
+  Две из них в макете шире кадра (2201 и 1728) и намеренно выходят за него:
+  видна только середина фигуры, её загнутые вниз края остаются за экраном.
+  Если держать макетную ширину, на широком мониторе в кадр попадает фигура
+  целиком — и плавная волна превращается в холм с крутыми плечами.
+
+  Поэтому ширина берётся долей от окна: --k = макетная ширина / 1440. Тогда
+  на любом мониторе в кадре та же часть фигуры, что и в макете. До 1728
+  множитель rem совпадает с этой долей, так что там ничего не меняется.
+  Для смещённых вбок подложек --k поднят до 1 / (1 − 2·смещение), иначе
+  сдвинутая фигура не докрывает противоположный край.
+
+  Смещение центра задано в процентах: процент в translate считается от
+  собственной ширины элемента, поэтому он масштабируется вместе с фигурой.
+*/
+.decor-bleed img {
+  position: absolute;
+  left: 50%;
+  width: max(var(--w), calc(var(--k, 1) * 100vw));
+  max-width: none;
+  transform: translateX(calc(-50% + var(--dxp, 0%)));
+}
+
+/* ── Компоненты ─────────────────────────────────────────────── */
+
+@layer components {
+  /* Пилюля-CTA: hero (крупная) и остальные секции (обычная) */
+  .u-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--color-blush);
+    background-color: var(--color-primary);
+    border: 0.0744rem solid rgb(255 255 255 / 0.13);
+    box-shadow: var(--shadow-cta);
+    backdrop-filter: blur(0.6706rem);
+    cursor: pointer;
+    /*
+      translate — отдельно от transform: подъём на наведении Tailwind пишет
+      именно в это свойство, и без него кнопка подпрыгивала рывком.
+    */
+    transition:
+      background-color 200ms var(--ease-out),
+      color 200ms var(--ease-out),
+      transform 200ms var(--ease-out),
+      translate 200ms var(--ease-out),
+      box-shadow 200ms var(--ease-out);
+  }
+  .u-cta:hover {
+    background-color: var(--color-primary-hover);
+  }
+  .u-cta:active {
+    background-color: var(--color-primary-pressed);
+    transform: translateY(0.0625rem);
+  }
+
+  @supports not (backdrop-filter: blur(1px)) {
+    .u-cta {
+      background-color: var(--color-primary);
+    }
+  }
+
+  /* Заголовок секции: две строки, вторая — акцентная */
+  /*
+    Строки заголовка заданы в макете явно (перенос через <br>), поэтому
+    запрещаем автоперенос: CSS в отличие от Figma добавляет трекинг после
+    последней буквы, из-за чего строка не влезает в коробку на 2-3px.
+  */
+  .u-heading {
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-align: center;
+    color: var(--color-ink);
+  }
+  .u-heading em {
+    font-style: normal;
+    color: var(--color-primary);
+  }
+
+  /*
+    Плитка галереи: рамка держит место в сетке, а увеличивается картинка
+    внутри неё. Так соседние плитки не дёргаются, и кадр не выходит за
+    скругление. Приподнимаем всю рамку — этого хватает, чтобы плитка
+    отделилась от фона; z-index нужен, чтобы тень не перекрывалась соседями.
+  */
+  .u-photo {
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    transition:
+      transform 260ms var(--ease-out),
+      box-shadow 260ms var(--ease-out);
+  }
+  .u-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 320ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .u-photo:hover {
+      z-index: 1;
+      transform: translateY(-0.375rem);
+      box-shadow: var(--shadow-card-lg);
+    }
+    .u-photo:hover img {
+      transform: scale(1.06);
+    }
+  }
+
+  /*
+    Бейдж «выбрать» в карточке пакета. Цвета приходят от темы карточки:
+    на наведении пара меняется на контрастную к самой карточке.
+  */
+  .u-chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
+    font-weight: 600;
+    background: var(--chip-bg);
+    color: var(--chip-fg);
+    transition:
+      background-color 200ms var(--ease-out),
+      color 200ms var(--ease-out),
+      transform 200ms var(--ease-out),
+      box-shadow 200ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .u-chip:hover {
+      background: var(--chip-bg-hover);
+      color: var(--chip-fg-hover);
+      transform: translateY(-0.125rem) scale(1.04);
+      box-shadow: 0 0.375rem 0.875rem rgb(14 23 54 / 0.24);
+    }
+  }
+  /* Галочка в кнопке выбранного пакета: по кеглю надписи, слева от неё. */
+  .u-chip-check {
+    width: 0.75em;
+    height: 0.75em;
+    margin-right: 0.3em;
+  }
+  .u-chip:active {
+    transform: translateY(0.0625rem) scale(1);
+  }
+
+  /*
+    Управление калькулятором: день календаря, кнопка месяца, переключатель
+    пакета и часов. Цвета приходят из разметки, здесь только отклик.
+
+    Раньше отклик был один на всех — подсветка фона в surface-alt. На днях
+    календаря это не работало: пятница и воскресенье и так стоят на
+    surface-alt, а суббота на blush, и под курсором у них не менялось ровно
+    ничего. Поэтому теперь наведение не подкрашивает фон в один цвет, а
+    примеряет выбор: акцентная обводка, розовая подложка и подъём с тенью —
+    это читается одинаково на всех трёх раскрасках ячейки.
+  */
+  .u-day,
+  .u-month,
+  .u-option {
+    transition:
+      background-color 160ms var(--ease-out),
+      border-color 160ms var(--ease-out),
+      color 160ms var(--ease-out),
+      box-shadow 160ms var(--ease-out),
+      translate 160ms var(--ease-out);
+  }
+
+  /*
+    Раскраска ячейки приходит из разметки переменными — сами свойства заданы
+    здесь. Иначе инлайн-стиль перекрывал бы наведение: он сильнее правил.
+  */
+  .u-day {
+    background-color: var(--day-bg, transparent);
+    border: 0.05rem solid var(--day-border, transparent);
+  }
+  .u-day-num {
+    color: var(--day-num, var(--color-ink));
+  }
+  .u-day-price {
+    color: var(--day-price, var(--color-muted));
+    transition: color 160ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .u-day:not(:disabled):not([aria-pressed="true"]):hover,
+    .u-option:not([aria-pressed="true"]):hover {
+      border-color: var(--color-primary);
+      background-color: var(--color-blush);
+      translate: 0 -0.125rem;
+      box-shadow: 0 0.25rem 0.625rem rgb(219 64 79 / 0.22);
+    }
+    /* Цена в ячейке под курсором тоже уходит в акцент — вместе с обводкой. */
+    .u-day:not(:disabled):not([aria-pressed="true"]):hover .u-day-price {
+      color: var(--color-primary);
+    }
+    /*
+      Уже выбранное под курсором не перекрашиваем — менять там нечего, — но
+      подтверждаем, что нажатие живое: тот же подъём и тень.
+    */
+    .u-day:not(:disabled)[aria-pressed="true"]:hover,
+    .u-option[aria-pressed="true"]:hover {
+      translate: 0 -0.125rem;
+      box-shadow: 0 0.25rem 0.625rem rgb(219 64 79 / 0.28);
+    }
+  }
+  /*
+    Нажатие: и день, и переключатель проседают под палец. Отдельно от
+    наведения, потому что на тачскрине наведения нет, а отклик нужен.
+  */
+  .u-day:not(:disabled):active,
+  .u-option:active,
+  .u-month:not(:disabled):active {
+    translate: 0 0.0625rem;
+    box-shadow: none;
+  }
+
+  /*
+    Стрелки месяца. Обводка и цвет менялись на светло-сером кружке почти
+    незаметно — добавлена заливка, лёгкий рост и сдвиг самой стрелки в ту
+    сторону, куда она листает: направление подсказывает само движение.
+  */
+  .u-month {
+    /* Базовые цвета здесь, а не утилитами в разметке: утилиты сильнее слоя. */
+    border-color: var(--color-border-soft);
+    color: var(--color-ink);
+    scale: 1;
+  }
+  .u-month svg {
+    transition: translate 160ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .u-month:not(:disabled):hover {
+      border-color: var(--color-primary);
+      background-color: var(--color-primary);
+      color: var(--color-surface);
+      scale: 1.08;
+      box-shadow: 0 0.25rem 0.625rem rgb(219 64 79 / 0.28);
+    }
+    .u-month:not(:disabled):hover svg {
+      translate: var(--nudge, 0) 0;
+    }
+  }
+  .u-month:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  /*
+    Кнопка «Залы» у адреса — уводит на страницу залов, сразу к этой площадке.
+    Отклика у неё не было вовсе: цвета стояли утилитами в разметке, и правило
+    наведения до них не доставало. Держим их здесь, в одном слое с наведением.
+  */
+  .u-halls-link {
+    background-color: var(--color-blush);
+    color: var(--color-ink);
+    transition:
+      background-color 200ms var(--ease-out),
+      color 200ms var(--ease-out),
+      box-shadow 200ms var(--ease-out),
+      translate 200ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .u-halls-link:hover {
+      background-color: var(--color-primary);
+      color: var(--color-surface);
+      translate: 0 -0.125rem;
+      box-shadow: 0 0.25rem 0.625rem rgb(219 64 79 / 0.28);
+    }
+  }
+  .u-halls-link:active {
+    translate: 0 0.0625rem;
+    box-shadow: none;
+  }
+
+/*
+  Карточка пакета как элемент выбора.
+
+  Три карточки — это переключатель, но выглядели они плакатом: подсказки, что
+  выбирать нужно здесь и что выбрано вот это, не было ни одной. Состояний
+  теперь три, и все они собираются на секции, без единой строчки состояния в
+  разметке карточек:
+
+    наведение — :hover на самой карточке;
+    соседи под наведением — #packages:has(...:hover) .u-package-card:not(:hover);
+    зафиксированный выбор — признак data-picked на секции (PackagesChoice.tsx).
+
+  Наведение важнее выбора: пока курсор на карточке, показываем её, а не
+  сделанный раньше выбор. Поэтому у правил выбора стоит :not(:has(:hover)).
+*/
+.u-package-card {
+  cursor: pointer;
+  outline: 0 solid transparent;
+  outline-offset: 0.375rem;
+  transition:
+    translate 240ms var(--ease-out),
+    scale 240ms var(--ease-out),
+    filter 240ms var(--ease-out),
+    opacity 240ms var(--ease-out),
+    box-shadow 240ms var(--ease-out),
+    outline-color 200ms var(--ease-out),
+    outline-width 200ms var(--ease-out);
+}
+
+/* Руби внутри карточки: уходит вниз и растворяется вместе с приглушением. */
+.u-package-mascot {
+  transition:
+    opacity 240ms var(--ease-out),
+    translate 320ms var(--ease-out);
+}
+
+/*
+  Приглушение. Не яркость, а насыщенность с лёгким осветлением: карточки
+  разного цвета — розовая, красная и тёмно-синяя, — и одно и то же затемнение
+  на них читалось бы по-разному. Насыщенность гасит все три одинаково.
+*/
+.u-package-card[data-dim="true"],
+#packages:has(.u-package-card:hover) .u-package-card:not(:hover),
+#packages[data-picked="happy"]:not(:has(.u-package-card:hover))
+  .u-package-card:not([data-package="happy"]),
+#packages[data-picked="extra"]:not(:has(.u-package-card:hover))
+  .u-package-card:not([data-package="extra"]),
+#packages[data-picked="wow"]:not(:has(.u-package-card:hover))
+  .u-package-card:not([data-package="wow"]) {
+  filter: saturate(0.42) opacity(0.72);
+  scale: 0.985;
+}
+
+#packages:has(.u-package-card:hover) .u-package-card:not(:hover) .u-package-mascot,
+#packages[data-picked="happy"]:not(:has(.u-package-card:hover))
+  .u-package-card:not([data-package="happy"]) .u-package-mascot,
+#packages[data-picked="extra"]:not(:has(.u-package-card:hover))
+  .u-package-card:not([data-package="extra"]) .u-package-mascot,
+#packages[data-picked="wow"]:not(:has(.u-package-card:hover))
+  .u-package-card:not([data-package="wow"]) .u-package-mascot {
+  opacity: 0;
+  translate: 0 1.5rem;
+}
+
+/*
+  Обводка выбранного — та же пара, что у выбранного дня в календаре: красная
+  рамка на своём отступе. Outline, а не border: карточка обрезает содержимое
+  по скруглению, и рамка внутри съела бы угол.
+*/
+@media (hover: hover) and (pointer: fine) {
+  .u-package-card:hover {
+    translate: 0 -0.5rem;
+    outline-width: 0.1875rem;
+    outline-color: var(--color-primary);
+    box-shadow: 0 1.25rem 2.5rem rgb(14 23 54 / 0.22);
+  }
+}
+
+/*
+  С клавиатуры наведения нет: фокус приходит на кнопку внутри карточки. Пусть
+  карточка отзывается так же — иначе табом видно только маленькую пилюлю, а
+  какой из трёх пакетов сейчас под рукой, непонятно.
+*/
+.u-package-card:has(.u-chip:focus-visible) {
+  translate: 0 -0.5rem;
+  outline-width: 0.1875rem;
+  outline-color: var(--color-primary);
+  box-shadow: 0 1.25rem 2.5rem rgb(14 23 54 / 0.22);
+}
+
+#packages:has(.u-chip:focus-visible) .u-package-card:not(:has(.u-chip:focus-visible)) {
+  filter: saturate(0.42) opacity(0.72);
+  scale: 0.985;
+}
+
+#packages:has(.u-chip:focus-visible)
+  .u-package-card:not(:has(.u-chip:focus-visible))
+  .u-package-mascot {
+  opacity: 0;
+  translate: 0 1.5rem;
+}
+
+#packages[data-picked="happy"] .u-package-card[data-package="happy"],
+#packages[data-picked="extra"] .u-package-card[data-package="extra"],
+#packages[data-picked="wow"] .u-package-card[data-package="wow"] {
+  outline-width: 0.1875rem;
+  outline-color: var(--color-primary);
+}
+
+/* Ссылки остаются частью списка, а подчёркивание и маленькая пиктограмма обозначают переход. */
+.u-package-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  color: inherit;
+  line-height: 1.2;
+  text-underline-offset: 0.16em;
+  transition: opacity 160ms var(--ease-out), transform 160ms var(--ease-out);
+}
+.u-package-link-label {
+  text-decoration: underline;
+  text-decoration-thickness: 0.06em;
+}
+.u-package-link-icon {
+  display: grid;
+  width: 1.05rem;
+  height: 1.05rem;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, currentColor 13%, transparent);
+  transition: background-color 160ms var(--ease-out), transform 160ms var(--ease-out);
+}
+.u-package-link-icon svg { width: 0.76rem; }
+@media (hover: hover) and (pointer: fine) {
+  .u-package-link:hover { opacity: 0.72; }
+  .u-package-link:hover .u-package-link-icon {
+    background: color-mix(in srgb, currentColor 22%, transparent);
+    transform: translateY(-0.06rem);
+  }
+}
+.u-package-link:active { transform: scale(0.97); }
+.u-package-link:focus-visible {
+  outline: 0.12rem solid currentColor;
+  outline-offset: 0.18rem;
+  border-radius: var(--radius-sm);
+}
+
+  /*
+    Пункт вопроса. Открытый — светлее и с красным кружком, закрытый ждёт
+    нажатия: под курсором подложка теплеет, а кружок обводится красным.
+    Кликается вся строка, поэтому отклик нужен на всей плашке, а не только
+    на значке.
+  */
+  .u-faq {
+    background: rgb(255 249 247 / 0.78);
+    transition: background-color 200ms var(--ease-out);
+  }
+  .u-faq[data-open="true"] {
+    background: #fbf4ed;
+  }
+  .u-faq-mark {
+    border-style: solid;
+    border-color: var(--color-border-soft);
+    background: transparent;
+    color: var(--color-ink);
+    transition:
+      background-color 200ms var(--ease-out),
+      border-color 200ms var(--ease-out),
+      color 200ms var(--ease-out);
+  }
+  .u-faq[data-open="true"] .u-faq-mark {
+    border-color: transparent;
+    background: var(--color-primary);
+    color: #ffffff;
+  }
+  /*
+    Под курсором закрытый вопрос должен читаться как кнопка, а не как строчка
+    текста. Одной подложки для этого мало: она меняется на пару процентов и
+    в глаза не бросается. Поэтому плашка ещё и приподнимается с тенью, сам
+    вопрос уходит в акцентный цвет, а плюсик подрастает и заливается —
+    примеряет тот вид, который получит после нажатия.
+  */
+  .u-faq {
+    translate: 0 0;
+    transition:
+      background-color 200ms var(--ease-out),
+      box-shadow 200ms var(--ease-out),
+      translate 200ms var(--ease-out);
+  }
+  .u-faq-question {
+    /* Цвет здесь же, иначе утилита text-ink из разметки не даст его сменить. */
+    color: var(--color-ink);
+    transition: color 200ms var(--ease-out);
+  }
+  .u-faq-mark {
+    scale: 1;
+    transition:
+      background-color 200ms var(--ease-out),
+      border-color 200ms var(--ease-out),
+      color 200ms var(--ease-out),
+      scale 200ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .u-faq[data-open="false"]:hover {
+      background: var(--color-surface);
+      translate: 0 -0.125rem;
+      box-shadow: 0 0.375rem 0.875rem rgb(14 23 54 / 0.1);
+    }
+    .u-faq[data-open="false"]:hover .u-faq-question {
+      color: var(--color-primary);
+    }
+    .u-faq[data-open="false"]:hover .u-faq-mark {
+      border-color: transparent;
+      background: var(--color-primary);
+      color: #ffffff;
+      scale: 1.12;
+    }
+  }
+  .u-faq[data-open="false"]:active {
+    translate: 0 0;
+    box-shadow: none;
+  }
+
+  /*
+    Полоса «Ну что, начинаем праздник?». На наведении вся плашка краснеет,
+    заголовок светлеет до розового, акцентное слово уходит в тёмно-синий,
+    а кнопка меняется с белой на тёмно-синюю — цвета заданы заказчиком.
+  */
+  .u-cta-band {
+    background: var(--color-navy);
+    transition: background-color 220ms var(--ease-out);
+  }
+  /*
+    Исходные цвета заданы здесь, а не утилитами Tailwind в разметке: утилиты
+    сильнее слоя компонентов и не дали бы им поменяться на наведении.
+  */
+  .u-cta-band .u-heading {
+    color: var(--color-surface);
+    transition: color 220ms var(--ease-out);
+  }
+  .u-cta-band .u-heading em {
+    color: var(--color-primary);
+    transition: color 220ms var(--ease-out);
+  }
+  /*
+    Нажимается вся плашка, а не только кнопка в углу. Ссылка при этом одна:
+    у кнопки растянут псевдоэлемент на всю полосу — вложенных ссылок в
+    разметке не бывает, а второй элемент поверх сломал бы и обход с
+    клавиатуры, и чтение вслух («оставить заявку» прозвучало бы дважды).
+  */
+  .u-cta-band {
+    cursor: pointer;
+  }
+  /*
+    inset: 0 отсчитывается от ближайшего позиционированного предка — это сама
+    плашка (её ставит box() из разметки). Поэтому у кнопки не должно быть
+    position: relative, иначе накрыло бы только её саму.
+  */
+  .u-cta-band-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .u-cta-band-btn {
+    background: var(--color-surface);
+    color: var(--color-primary);
+    transition:
+      background-color 220ms var(--ease-out),
+      color 220ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .u-cta-band:hover {
+      background: var(--color-primary);
+    }
+    .u-cta-band:hover .u-heading {
+      color: var(--color-blush);
+    }
+    .u-cta-band:hover .u-heading em {
+      color: var(--color-navy);
+    }
+    .u-cta-band:hover .u-cta-band-btn {
+      background: var(--color-navy);
+      color: var(--color-blush);
+    }
+  }
+
+  /* Иконки мессенджеров в подвале — тот же отклик, что в шапке */
+  .u-msgr {
+    border: 0.0675rem solid transparent;
+    transition:
+      background-color 200ms var(--ease-out),
+      border-color 200ms var(--ease-out),
+      translate 200ms var(--ease-out),
+      box-shadow 200ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .u-msgr:hover {
+      translate: 0 -0.125rem;
+      border-color: var(--color-primary);
+      background: var(--color-blush);
+      box-shadow: 0 0.375rem 0.875rem rgb(28 17 23 / 0.18);
+    }
+  }
+
+  /* Ссылка на карточку места в Яндекс.Картах */
+  .u-maplink {
+    transition:
+      background-color 200ms var(--ease-out),
+      border-color 200ms var(--ease-out),
+      color 200ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .u-maplink:hover {
+      border-color: var(--color-primary);
+      background: var(--color-primary);
+      color: var(--color-surface);
+    }
+  }
+
+  /*
+    Поле формы. Обводка на фокусе — синяя, на промахе — красная: если бы обе
+    были красными, заполненное поле под курсором выглядело бы как ошибка.
+  */
+  .u-field {
+    border: 0.0625rem solid transparent;
+    transition: border-color 160ms var(--ease-out);
+  }
+  .u-field:focus {
+    outline: none;
+    border-color: var(--color-navy);
+  }
+  .u-field[aria-invalid="true"] {
+    border-color: var(--color-primary);
+  }
+
+  /*
+    Промах по обязательному полю. Сдвиг маленький (6 px) и короткий: задача —
+    показать, куда смотреть, а не напугать. Класс снимается и вешается заново
+    из обработчика, иначе вторая попытка прошла бы без анимации.
+  */
+  .u-shake {
+    animation: u-shake 420ms var(--ease-out) both;
+  }
+
+  /*
+    Плашка «наш выбор» у заголовков карточек калькулятора. Набрана так же
+    приглушённо, как сам предвыбранный вариант: это подсказка, а не решение
+    за человека. Как только он выбирает сам, плашка гаснет.
+  */
+  .u-hint {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius-pill);
+    background: var(--color-blush);
+    color: var(--color-ink-muted);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: opacity 200ms var(--ease-out);
+  }
+  .u-hint[aria-hidden="true"] {
+    opacity: 0;
+  }
+
+  /*
+    Пункт чек-листа в карточке «Ты уже выбрала». Невыполненный набран
+    приглушённо, выполненный — обычным цветом текста; кружок при этом
+    заливается. Оба кружка лежат друг на друге и меняются местами, чтобы
+    отметка не возникала из ниоткуда.
+  */
+  /*
+    Строка чек-листа — ссылка на свой шаг. Подчёркивание появляется только под
+    курсором: четыре постоянных подчёркивания в маленькой карточке спорили бы
+    с самими отметками, а понять, что строка кликабельна, помогает и курсор.
+  */
+  .u-step {
+    display: block;
+    color: var(--color-ink-muted);
+    cursor: pointer;
+    text-decoration: none;
+    text-underline-offset: 0.2em;
+    transition:
+      color 200ms var(--ease-out),
+      translate 200ms var(--ease-out);
+  }
+  .u-step[data-done="true"] {
+    color: var(--color-ink);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .u-step:hover {
+      color: var(--color-primary);
+      translate: 0.125rem 0;
+      text-decoration: underline;
+    }
+  }
+  .u-step:focus-visible {
+    color: var(--color-primary);
+    text-decoration: underline;
+    outline: none;
+  }
+  .u-check > svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .u-check > .on {
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 180ms var(--ease-out),
+      transform 260ms var(--ease-pop);
+  }
+  .u-check > .off {
+    opacity: 1;
+    transition: opacity 180ms var(--ease-out);
+  }
+  .u-step[data-done="true"] .u-check > .on {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .u-step[data-done="true"] .u-check > .off {
+    opacity: 0;
+  }
+
+  /* Подзаголовок секции — единственный стиль на весь сайт */
+  .u-lede {
+    white-space: nowrap;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--text-l);
+    line-height: var(--text-l--line-height);
+    letter-spacing: 0.04em;
+    text-align: center;
+    color: var(--color-ink);
+  }
+}
+
+/* ── Сценарий появления первого экрана ──────────────────────────
+   0 → 0.3с   выход из затемнения, видео играет в чистом виде
+   2с         верхняя панель: логотип, меню, мессенджеры, CTA
+   7с         подложка выезжает слева направо, текст печатается,
+              кнопки всплывают следом
+   Всё на CSS-анимациях: они идут мимо основного потока и не спотыкаются,
+   пока страница догружает видео и картинки.
+*/
+
+/* Ворота группы: сама обёртка курсор не ловит никогда, иначе растянутый
+   на всю сцену слой накрыл бы шапку. Дети оживают, когда группа показана. */
+.hero-gate {
+  pointer-events: none;
+}
+.hero-gate[data-shown="true"] > * {
+  pointer-events: auto;
+}
+
+/*
+  Верхняя панель выезжает сверху вниз, по элементу с шагом 60мс:
+  логотип, меню, мессенджеры, кнопка. Обёртка отдельным span, чтобы
+  выезд не конфликтовал с собственными переходами наведения у кнопок.
+*/
+.hero-drop {
+  opacity: 0;
+  transform: translateY(-3.5rem);
+  transition:
+    opacity 520ms var(--ease-out),
+    transform 900ms var(--ease-drawer);
+  transition-delay: var(--delay, 0ms);
+}
+.hero-gate[data-shown="true"] .hero-drop {
+  opacity: 1;
+  transform: none;
+}
+
+/* Затемнение поверх видео на старте */
+.hero-curtain {
+  opacity: 1;
+  transition: opacity 300ms ease-out;
+}
+.hero-curtain[data-shown="true"] {
+  opacity: 0;
+}
+
+/*
+  Медленный наезд кадра ВЫКЛЮЧЕН.
+
+  Причина не в CSS. Исходник снят в 24 кадра/с, а экран обновляется 60 раз
+  в секунду: кадры показываются по схеме 3:2, и пока картинка статична, это
+  незаметно. Стоит добавить непрерывное медленное движение — чередование
+  становится видно и читается как тряска. Сгладить это на стороне браузера
+  нельзя: нужно либо запекать движение в сам ролик и пересобирать его с
+  интерполяцией до 48–60 кадров, либо обходиться без наезда.
+
+  Разметка и класс оставлены: чтобы вернуть, достаточно снять data-zoom
+  в Hero.tsx и раскомментировать анимацию ниже.
+*/
+.hero-zoom {
+  backface-visibility: hidden;
+}
+.hero-zoom[data-zoom="true"] {
+  transform: scale(1.05);
+  will-change: transform;
+}
+.hero-zoom[data-zoom="true"][data-shown="true"] {
+  animation: hero-zoom 7030ms linear forwards;
+}
+@keyframes hero-zoom {
+  from {
+    transform: scale(1.05);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Розовая подложка выезжает слева направо, а не проявляется на месте */
+.hero-veil {
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  transition:
+    opacity 160ms ease-out,
+    clip-path 380ms var(--ease-out);
+}
+.hero-veil[data-shown="true"] {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+}
+
+/*
+  Печатная машинка: буква появляется целиком, без проявления.
+  Сделано переходом, а не кадрами: keyframes со steps(1) и fill-mode forwards
+  в Chrome оставляют часть букв на начальном значении — анимация числится
+  завершённой, а прозрачность остаётся нулевой. Переход с задержкой ведёт
+  себя предсказуемо, а 1мс длительности даёт ту же мгновенную подстановку.
+*/
+.hero-type span[data-ch] {
+  opacity: 0;
+  transition: opacity 1ms linear;
+  transition-delay: calc(var(--start, 0ms) + var(--i) * var(--step, 20ms));
+}
+.hero-gate[data-shown="true"] .hero-type span[data-ch] {
+  opacity: 1;
+}
+
+/*
+  Каретка идёт следом за буквами: у каждого символа своя черта, которая
+  зажигается в его момент и гаснет к следующему. Заливка forwards, а не both,
+  иначе все каретки светились бы ещё до начала печати.
+*/
+.hero-type span[data-ch] {
+  position: relative;
+}
+.hero-type span[data-ch]::after {
+  content: "";
+  position: absolute;
+  top: 0.1em;
+  bottom: 0.06em;
+  right: -0.05em;
+  width: 0.055em;
+  background: currentColor;
+  opacity: 0;
+}
+.hero-gate[data-shown="true"] .hero-type span[data-ch]::after {
+  animation: hero-caret var(--step, 20ms) linear forwards;
+  animation-delay: calc(var(--start, 0ms) + var(--i) * var(--step, 20ms));
+}
+@keyframes hero-caret {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Промах по обязательному полю — короткий отказ головой. */
+@keyframes u-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  15% {
+    transform: translateX(-0.375rem);
+  }
+  35% {
+    transform: translateX(0.3125rem);
+  }
+  55% {
+    transform: translateX(-0.25rem);
+  }
+  75% {
+    transform: translateX(0.125rem);
+  }
+}
+
+/*
+  Акцентное слово коротко «клюёт» масштабом, когда допечаталось, —
+  ведёт глаз к главному. Только transform, никакого свечения на краске.
+*/
+.hero-flash {
+  display: inline-block;
+  transform-origin: left center;
+}
+.hero-gate[data-shown="true"] .hero-flash {
+  animation: hero-flash 260ms var(--ease-out) var(--at, 0ms) both;
+}
+@keyframes hero-flash {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.035);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Кнопки всплывают пузырями — с лёгким перелётом */
+.hero-pop {
+  opacity: 0;
+  transform: translateY(0.75rem) scale(0.94);
+  transition:
+    opacity 260ms var(--ease-out),
+    transform 260ms var(--ease-pop);
+  transition-delay: var(--delay, 0ms);
+}
+.hero-gate[data-shown="true"] .hero-pop {
+  opacity: 1;
+  transform: none;
+}
+
+/*
+  Сценарий первого экрана — часть продукта, а не украшение: заказчик просил
+  именно выезд, наезд и печать. Поэтому здесь он играет и при включённом
+  prefers-reduced-motion. Общее правило доступности ниже глушит длительности
+  у всего подряд, поэтому возвращаем их поимённо — иначе сцена схлопывается
+  в мгновенное возникновение.
+
+  Если понадобится уважать системную настройку, правильный путь — не резать
+  движение, а не запускать сценарий автоматически и дать кнопку.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .hero-zoom[data-zoom="true"][data-shown="true"] {
+    animation-duration: 7030ms !important;
+  }
+  .hero-curtain {
+    transition-duration: 300ms !important;
+  }
+  .hero-drop {
+    transition-duration: 520ms, 900ms !important;
+  }
+  .hero-veil {
+    transition-duration: 160ms, 380ms !important;
+  }
+  /* Растворение внизу идёт с заливкой в одну ногу — глушить нельзя. */
+  .hero-seam {
+    transition-duration: 380ms !important;
+  }
+  .hero-pop {
+    transition-duration: 260ms !important;
+  }
+  .hero-type span[data-ch] {
+    transition-duration: 1ms !important;
+  }
+  .hero-gate[data-shown="true"] .hero-type span[data-ch]::after {
+    animation-duration: var(--step, 12ms) !important;
+  }
+  .hero-gate[data-shown="true"] .hero-flash {
+    animation-duration: 260ms !important;
+  }
+}
+
+/*
+  Отклик на наведение живёт и при prefers-reduced-motion. Общее правило ниже
+  глушит длительности у всего подряд, и подсветка кнопки превращалась в
+  мгновенный скачок цвета — вместо подсказки «сюда можно нажать» получалась
+  помеха. Сдвиги здесь микроскопические (2–6 px), укачать нечем, поэтому
+  возвращаем поимённо только длительности: сама амплитуда не растёт.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .u-cta,
+  .u-chip,
+  .u-photo,
+  .u-photo img,
+  .u-day,
+  .u-month,
+  .u-option,
+  .u-field,
+  .u-maplink,
+  .u-cta-band,
+  .u-cta-band .u-heading,
+  .u-cta-band .u-heading em,
+  .u-cta-band-btn,
+  .u-msgr,
+  .u-faq,
+  .u-faq-mark,
+  .u-step,
+  .u-hint,
+  .u-check > svg {
+    transition-duration: 200ms !important;
+  }
+  /* Отказ по обязательному полю — единственный сигнал о промахе, гасить нельзя */
+  .u-shake {
+    animation-duration: 420ms !important;
+  }
+  /*
+    Перекраска шапки на тёмном фоне. Без плавности логотип и пилюля меняют
+    цвет мгновенным щелчком посреди прокрутки — читается как подмена
+    элемента, а не как подстройка под фон. Меняется только цвет, ничего
+    не движется, укачать нечем.
+  */
+  /*
+    Выезд и уход плавающей шапки. Её вызывает наведение в верхнюю полосу
+    экрана, то есть это ответ на действие, а не самостоятельное движение. Без
+    длительности шапка возникала бы щелчком у самого края — читается как рывок
+    страницы, а не как появление меню.
+  */
+  .floating-site-header {
+    transition-duration: 360ms, 240ms !important;
+  }
+
+  /*
+    Смена состояния зала: это не украшение, а ответ на действие — за 180мс
+    один нарисованный кадр дома сменяется другим. Мгновенная подмена читалась
+    бы как подёргивание картинки.
+  */
+  .hall-state,
+  .u-step-check,
+  .u-step-sticker,
+  .u-step-hint,
+  .halls-instruction,
+  .floating-header-logo,
+  .site-header-home,
+  .site-header-home::after,
+  .floating-header-chip,
+  .floating-header-nav,
+  .floating-header-nav-ring,
+  .floating-header-scrim,
+  .u-header-phone {
+    transition-duration: 220ms !important;
+  }
+  /*
+    Карточки Reels. Сам ролик при наведении играет в любом случае — это
+    содержимое раздела, а не украшение, и prefers-reduced-motion на
+    воспроизведение видео всё равно не влияет. Здесь возвращаем только
+    длительности отклика кнопки и наплыва кадра, иначе они срабатывали бы
+    щелчком, а не подсказкой.
+  */
+  .u-reel-play {
+    transition-duration: 220ms, 220ms, 300ms !important;
+  }
+  .u-reel-media {
+    transition-duration: 500ms !important;
+  }
+  /*
+    Слой с роликом: наплыв кадра как у заставки, проявление плавное, а
+    исчезновение мгновенное — порядок тот же, что в объявлении выше.
+  */
+  .u-reel-video {
+    transition-duration: 500ms, 0ms !important;
+  }
+  .u-reel-video[data-playing="true"] {
+    transition-duration: 500ms, 220ms !important;
+  }
+
+  /*
+    Отклик там, где его раньше не хватало: стрелки месяца, ссылки в карточках
+    пакетов, вопросы. Величины микроскопические (2–6px), укачать нечем, а без
+    длительности это снова превратится в щелчок.
+  */
+  .u-month svg,
+  .u-halls-link,
+  .u-package-link,
+  .u-package-link-icon,
+  .halls-action-all,
+  .u-faq-question {
+    transition-duration: 160ms !important;
+  }
+
+  /*
+    Закрытие шага: печать галочки, искры и зов следующего шага. Всё три —
+    ответ на действие человека, длятся меньше секунды и никуда не двигают
+    страницу. Без длительности вместо отметки получился бы щелчок, а искры
+    не появились бы вовсе.
+  */
+  [data-step][data-just-done] .u-step-check {
+    animation-duration: 460ms !important;
+  }
+  [data-step][data-just-done] .u-step-burst i {
+    animation-duration: 620ms !important;
+  }
+  [data-step][data-invite] .u-step-sticker {
+    animation-duration: 820ms !important;
+  }
+
+  /*
+    Карточки пакетов: приглушение соседей и подъём выбранной. Движение
+    короткое и по своей оси; без длительности выбор превращался бы в скачок
+    всей тройки разом.
+  */
+  .u-package-card,
+  .u-package-mascot {
+    transition-duration: 240ms !important;
+  }
+
+  /*
+    Веер под кнопкой «Все залы». Это не украшение поверх готовой кнопки: без
+    движения девять карточек просто возникают стопкой, и приём, ради которого
+    всё затевалось, пропадает. Движение короткое, по своей оси, к прокрутке
+    не привязано. Порядок величин — как в объявлении: поворот, сдвиг,
+    масштаб, прозрачность.
+  */
+  .halls-fan img {
+    transition-duration: 420ms, 420ms, 320ms, 220ms !important;
+  }
+
+  /*
+    Появление блоков при прокрутке. Это не украшение поверх готовой страницы:
+    без длительности блок просто возникает, и вся задумка пропадает. Движение
+    короткое — 20px вверх, к самой прокрутке не привязано, укачивания не даёт.
+
+    Если понадобится уважать системную настройку, путь тот же, что у сценария
+    первого экрана: не резать движение, а не прятать блоки вовсе.
+  */
+  [data-reveal][data-revealed] {
+    animation-duration: 640ms !important;
+  }
+
+  /*
+    Плавный переход по якорям. Общее правило ниже ставит scroll-behavior: auto,
+    и переход к секции превращался в мгновенный прыжок через полстраницы —
+    непонятно, куда тебя унесло.
+  */
+  html {
+    scroll-behavior: smooth !important;
+  }
+}
+
+/* ── Юридические документы поверх страницы ──────────────────── */
+
+/*
+  Кегль в clamp с пределами в пикселях, а не в rem макета: документ читают,
+  и он должен оставаться читаемым и на ноутбуке (масштаб 0.71), и на 4K (2.5).
+  Всё внутри задано в em от этой базы.
+*/
+.u-legal {
+  font-size: clamp(13px, 0.875rem, 17px);
+  width: min(46em, calc(100vw - 2rem));
+  max-height: min(84vh, 52em);
+  /* preflight обнуляет margin у всего, а без auto диалог прилипает к углу */
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 1.35em;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: 0 1.5em 3em rgb(14 23 54 / 0.28);
+  overflow: hidden;
+}
+.u-legal::backdrop {
+  background: rgb(14 23 54 / 0.55);
+}
+.u-legal[open] {
+  animation: legal-in 220ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.u-legal[open]::backdrop {
+  animation: legal-fade 220ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes legal-in {
+  from {
+    opacity: 0;
+    transform: translateY(1em) scale(0.98);
+  }
+}
+@keyframes legal-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.u-legal-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+}
+.u-legal-head {
+  position: relative;
+  padding: 1.8em 3.6em 1.2em 2em;
+  background: var(--color-surface-alt);
+}
+.u-legal-kicker {
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+.u-legal-title {
+  margin-top: 0.35em;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.7em;
+  line-height: 1.1;
+}
+.u-legal-lede {
+  margin-top: 0.6em;
+  font-size: 0.92em;
+  line-height: 1.45;
+  color: var(--color-ink-secondary);
+}
+.u-legal-close {
+  position: absolute;
+  top: 1.3em;
+  right: 1.3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1em;
+  height: 2.1em;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  transition:
+    background-color 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+}
+.u-legal-close svg {
+  width: 0.85em;
+}
+@media (hover: hover) and (pointer: fine) {
+  .u-legal-close:hover {
+    background: var(--color-primary);
+    color: var(--color-surface);
+  }
+}
+
+.u-legal-body {
+  overflow-y: auto;
+  padding: 1.6em 2em 2em;
+  font-size: 0.94em;
+  line-height: 1.55;
+}
+.u-legal-body section + section {
+  margin-top: 1.6em;
+}
+
+/* ── Еда в пакетах ─────────────────────────────────────────────────────── */
+
+.u-food-trigger {
+  display: inline-flex;
+  width: auto;
+  height: 100%;
+  align-items: center;
+  gap: 0.34rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  font-size: inherit;
+  line-height: 1.2;
+  transition: opacity 160ms var(--ease-out), transform 160ms var(--ease-out);
+}
+.u-food-trigger-label {
+  white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.17em;
+}
+.u-food-trigger-icon {
+  display: grid;
+  width: 1.08rem;
+  height: 1.08rem;
+  flex: none;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  transition: background-color 160ms var(--ease-out), transform 160ms var(--ease-out);
+}
+.u-food-trigger-icon svg { width: 0.82rem; }
+@media (hover: hover) and (pointer: fine) {
+  .u-food-trigger:hover { opacity: 0.72; }
+  .u-food-trigger:hover .u-food-trigger-icon {
+    background: color-mix(in srgb, currentColor 24%, transparent);
+    transform: translateY(-0.06rem);
+  }
+}
+.u-food-trigger:active {
+  transform: scale(0.97);
+}
+.u-food-trigger:focus-visible {
+  outline: 0.12rem solid currentColor;
+  outline-offset: 0.18rem;
+  border-radius: var(--radius-sm);
+}
+
+.food-modal-open {
+  overflow: hidden;
+}
+.u-food-modal {
+  /*
+    Ширина и высота под содержимое: набор — это фотография стола и шесть
+    позиций, и всё это помещается на экран. Прокрутка внутри окна была лишним
+    действием там, где места хватало: окно занимало 64em при доступных 96vw.
+  */
+  width: min(76em, calc(100vw - 1.5rem));
+  max-height: min(94dvh, 62em);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 1.5em;
+  background: var(--color-page);
+  color: var(--color-ink);
+  box-shadow: 0 1.5em 4em rgb(14 23 54 / 0.32);
+  overflow: hidden;
+  font-size: clamp(14px, 0.9375rem, 17px);
+}
+.u-food-modal[data-view="menu"] {
+  width: min(96vw, 96em);
+  height: 94dvh;
+  max-height: 94dvh;
+}
+.u-food-modal[data-view="menu"] .u-food-head {
+  padding: 0.8em 4.5em 0.8em 1.35em;
+}
+.u-food-modal[data-view="menu"] .u-food-kicker,
+.u-food-modal[data-view="menu"] .u-food-head p:last-child {
+  display: none;
+}
+.u-food-modal[data-view="menu"] .u-food-head h2 {
+  margin-top: 0;
+  font-size: 1.55em;
+}
+.u-food-modal[data-view="menu"] .u-food-close {
+  top: 0.65em;
+  right: 0.85em;
+}
+.u-food-modal[data-view="menu"] .u-food-tabs {
+  padding: 0.45em 1.35em;
+}
+.u-food-modal::backdrop {
+  background: rgb(14 23 54 / 0.66);
+  backdrop-filter: blur(0.35em);
+}
+.u-food-modal[open] {
+  animation: food-modal-in 240ms var(--ease-out);
+}
+.u-food-modal[open]::backdrop {
+  animation: food-backdrop-in 200ms var(--ease-out);
+}
+@keyframes food-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(1em) scale(0.97);
+  }
+}
+@keyframes food-backdrop-in {
+  from { opacity: 0; }
+}
+.u-food-panel {
+  display: flex;
+  height: 100%;
+  max-height: inherit;
+  flex-direction: column;
+}
+.u-food-head {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 1.55em 5em 1.15em 1.8em;
+  background: var(--color-surface-alt);
+}
+.u-food-kicker,
+.u-food-label {
+  color: var(--color-primary);
+  font-size: 0.72em;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.u-food-head h2 {
+  margin-top: 0.25em;
+  font-family: var(--font-display);
+  font-size: 2em;
+  font-weight: 900;
+  line-height: 1.05;
+}
+.u-food-head p:last-child {
+  max-width: 47em;
+  margin-top: 0.55em;
+  color: var(--color-ink-secondary);
+  font-size: 0.9em;
+  line-height: 1.45;
+}
+.u-food-close {
+  position: absolute;
+  top: 1.25em;
+  right: 1.25em;
+  display: grid;
+  width: 2.5em;
+  height: 2.5em;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out), transform 160ms var(--ease-out);
+}
+.u-food-close svg { width: 0.95em; }
+.u-food-close:active { transform: scale(0.94); }
+@media (hover: hover) and (pointer: fine) {
+  .u-food-close:hover {
+    background: var(--color-primary);
+    color: var(--color-surface);
+  }
+}
+.u-food-tabs {
+  display: flex;
+  gap: 0.45em;
+  padding: 0.75em 1.8em;
+  border-bottom: 1px solid rgb(14 23 54 / 0.1);
+  background: var(--color-surface);
+}
+/*
+  Вкладки набора и меню. Невыбранная была прозрачной надписью и читалась как
+  заголовок, а не как вторая половина переключателя: непонятно, что здесь
+  вообще есть выбор. Теперь у обеих есть коробка, и различаются они заливкой.
+*/
+.u-food-tabs button {
+  padding: 0.62em 1.15em;
+  border: 1px solid rgb(14 23 54 / 0.18);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 160ms var(--ease-out),
+    border-color 160ms var(--ease-out),
+    color 160ms var(--ease-out),
+    box-shadow 160ms var(--ease-out),
+    transform 160ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .u-food-tabs button:not([aria-pressed="true"]):hover {
+    border-color: var(--color-primary);
+    background: var(--color-surface-alt);
+    color: var(--color-primary);
+  }
+}
+.u-food-tabs button[aria-pressed="true"] {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  box-shadow: 0 0.2em 0.5em rgb(219 64 79 / 0.28);
+}
+.u-food-tabs button:active { transform: scale(0.97); }
+.u-food-body {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.35em 1.8em 1.4em;
+}
+.u-food-set {
+  max-width: 58em;
+  margin-inline: auto;
+}
+.u-food-table {
+  position: relative;
+  overflow: hidden;
+  /*
+    Кадр стола шире, чем был: 3/1.45 при выросшей ширине окна занимал пол-экрана
+    и выдавливал список за нижний край. Стол снят сверху, полоса по центру —
+    самое содержательное в кадре, края теряются без потери смысла.
+  */
+  aspect-ratio: 3 / 1.02;
+  /*
+    На низком экране пропорции мало помогают: кадр всё равно съедает высоту,
+    которой не хватает списку. Поэтому потолок в долях экрана — кадр просто
+    подрезается, он снят сверху и края в нём не несут смысла.
+  */
+  max-height: 40dvh;
+  border-radius: 1.2em;
+  background: var(--color-blush);
+}
+.u-food-table img { object-fit: cover; }
+.u-food-set-intro {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1em;
+  padding: 1.1em 0 0.75em;
+}
+.u-food-set-intro h3 {
+  font-family: var(--font-display);
+  font-size: 1.45em;
+  font-weight: 900;
+  line-height: 1.1;
+}
+.u-food-set-intro strong {
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-size: 1.45em;
+  white-space: nowrap;
+}
+/*
+  Пометка количества у позиции набора: та же пилюля, что у цен, но мельче.
+  Стоит сразу за названием, а не у цены: цена в наборе указана за одну штуку.
+*/
+/*
+  Селектор длиннее, чем хотелось бы: рядом живёт правило .u-food-item-copy span,
+  красящее цену в акцент, и оно красило пометку красным по красному — надпись
+  пропадала. Специфичность здесь не украшение, а условие видимости.
+*/
+.u-food-item-copy .u-food-item-count {
+  display: inline-block;
+  margin-left: 0.4em;
+  padding: 0.08em 0.45em;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font-size: 0.92em;
+  font-weight: 800;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.u-food-items {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75em;
+}
+.u-food-items li {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0.55em;
+  border: 1px solid rgb(14 23 54 / 0.09);
+  border-radius: 1em;
+  background: var(--color-surface);
+}
+.u-food-item-image {
+  position: relative;
+  width: 5.5em;
+  height: 4.2em;
+  flex: none;
+}
+.u-food-item-image img { object-fit: contain; }
+.u-food-item-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.3em;
+  line-height: 1.25;
+}
+.u-food-item-copy b { font-size: 0.82em; }
+.u-food-item-copy span {
+  color: var(--color-primary);
+  font-size: 0.82em;
+  font-weight: 800;
+}
+/*
+  Низкий широкий экран: ноутбучные 1280×800 и подобные. Столбцом набор туда не
+  влезает — кадр стола и шесть позиций требуют высоты, которой нет, — зато
+  вдоволь ширины. Раскладываем в два столбца: слева кадр во всю высоту,
+  справа заголовок и позиции по две в ряд. Прокрутка не нужна.
+*/
+@media (min-width: 62em) and (max-height: 58em) {
+  .u-food-set {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: 1.2em;
+    max-width: none;
+  }
+  .u-food-table {
+    grid-row: span 2;
+    aspect-ratio: auto;
+    max-height: none;
+  }
+  .u-food-set-intro {
+    padding-top: 0;
+  }
+  .u-food-items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+  }
+}
+
+.u-food-note {
+  display: flex;
+  gap: 0.9em;
+  margin-top: 1em;
+  padding: 1em 1.15em;
+  border-radius: 1em;
+  background: var(--color-blush);
+  font-size: 0.86em;
+  line-height: 1.45;
+}
+.u-food-note > span {
+  display: grid;
+  width: 2.2em;
+  height: 2.2em;
+  flex: none;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-size: 1.1em;
+  font-weight: 900;
+}
+.u-food-note b { display: block; margin-bottom: 0.15em; }
+.u-food-body-menu {
+  overflow: hidden;
+  padding: 0;
+}
+.u-food-menu-view,
+.u-food-menu-carousel,
+.u-food-menu-stack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 33em;
+}
+.u-food-menu-carousel {
+  overflow: hidden;
+  outline: none;
+  background: linear-gradient(180deg, var(--color-page), #f8edef);
+}
+.u-food-menu-carousel:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--color-primary);
+}
+.u-food-menu-page {
+  position: absolute;
+  top: 1.1em;
+  bottom: 2.5em;
+  left: 50%;
+  aspect-ratio: 595 / 842;
+  opacity: 0;
+  transform: translateX(-50%) scale(0.78);
+  pointer-events: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-card);
+  background: transparent;
+  overflow: hidden;
+  transition: transform 240ms var(--ease-out), opacity 180ms var(--ease-out), filter 240ms var(--ease-out);
+}
+.u-food-menu-page img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-card);
+  object-fit: contain;
+  box-shadow: 0 0.7em 2em rgb(14 23 54 / 0.16);
+}
+.u-food-menu-page[data-position="active"] {
+  z-index: 3;
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+.u-food-menu-page[data-position="prev"] {
+  z-index: 1;
+  opacity: 0.38;
+  transform: translateX(-118%) translateY(0.8em) scale(0.88);
+  filter: saturate(0.7);
+  pointer-events: auto;
+  cursor: pointer;
+}
+.u-food-menu-page[data-position="next"] {
+  z-index: 1;
+  opacity: 0.38;
+  transform: translateX(18%) translateY(0.8em) scale(0.88);
+  filter: saturate(0.7);
+  pointer-events: auto;
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .u-food-menu-page[data-position="prev"]:hover {
+    opacity: 0.56;
+    transform: translateX(-118%) translateY(0.45em) scale(0.9);
+  }
+  .u-food-menu-page[data-position="next"]:hover {
+    opacity: 0.56;
+    transform: translateX(18%) translateY(0.45em) scale(0.9);
+  }
+}
+.u-food-menu-count {
+  position: absolute;
+  bottom: 0.65em;
+  left: 50%;
+  z-index: 5;
+  min-width: 4.6em;
+  padding: 0.35em 0.7em;
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-ink-secondary);
+  box-shadow: 0 0.25em 1em rgb(14 23 54 / 0.1);
+  font-size: 0.78em;
+  font-weight: 800;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 700px) {
+  .u-food-modal {
+    width: calc(100vw - 1rem);
+    max-height: 94dvh;
+    border-radius: 1.2em;
+  }
+  .u-food-modal[data-view="menu"] {
+    width: calc(100vw - 0.5rem);
+    height: 96dvh;
+    max-height: 96dvh;
+  }
+  .u-food-head { padding: 1.25em 4em 1em 1.15em; }
+  .u-food-head h2 { font-size: 1.65em; }
+  .u-food-tabs { padding-inline: 1.15em; }
+  .u-food-body { padding: 1em 1.15em 1.4em; }
+  .u-food-table { aspect-ratio: 1.35 / 1; }
+  .u-food-set-intro { align-items: start; flex-direction: column; }
+  .u-food-items { grid-template-columns: 1fr; }
+  .u-food-item-image { width: 6em; }
+  .u-food-menu-view,
+  .u-food-menu-carousel,
+  .u-food-menu-stack { min-height: 25em; }
+  .u-food-menu-page {
+    top: 0.8em;
+    bottom: 2.3em;
+  }
+  .u-food-menu-page[data-position="prev"] {
+    transform: translateX(-130%) translateY(0.65em) scale(0.84);
+  }
+  .u-food-menu-page[data-position="next"] {
+    transform: translateX(30%) translateY(0.65em) scale(0.84);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .u-food-modal[open],
+  .u-food-modal[open]::backdrop {
+    animation: food-backdrop-in 160ms ease-out;
+  }
+}
+/*
+  Карточка Reels. Кнопка воспроизведения остаётся там же, где в макете, и на
+  наведении меняет цвет: круг из светло-розового становится акцентным, стрелка
+  из тёмно-синей — белой. Базовые цвета заданы здесь, а не утилитами в
+  разметке, иначе наведение бы их не перебило.
+*/
+/*
+  Кнопка воспроизведения объясняет, что в карточке видео. Как только ролик
+  пошёл, объяснять больше нечего — она уходит, чтобы не загораживать кадр.
+*/
+.u-reel-play {
+  background-color: var(--color-blush);
+  color: var(--color-navy);
+  transition:
+    background-color 220ms var(--ease-out),
+    color 220ms var(--ease-out),
+    opacity 220ms var(--ease-out),
+    scale 300ms var(--ease-out);
+}
+.u-reel-media {
+  transition: transform 500ms var(--ease-out);
+}
+
+/*
+  Ролик лежит слоем над заставкой и проявляется, только когда действительно
+  пошёл. Пока он в покое — прозрачный, и в карточке виден ровно кадр из макета.
+
+  Появление сглажено, исчезновение мгновенное: на уходе курсора ролик уже
+  встал, и провожать замерший кадр затуханием нечем — это читалось бы как
+  подтормаживание.
+
+  Классы у заставки и у ролика разные, хотя наплыв кадра у них общий. Пока
+  видео носило оба, правило для prefers-reduced-motion, поимённо возвращающее
+  заставке её 500мс, доставалось и ролику — и слой гас полсекунды вместо того,
+  чтобы исчезнуть сразу. Длительности здесь заданы по свойствам явно.
+*/
+.u-reel-video {
+  opacity: 0;
+  transition:
+    transform 500ms var(--ease-out),
+    opacity 0ms;
+}
+.u-reel-video[data-playing="true"] {
+  opacity: 1;
+  transition:
+    transform 500ms var(--ease-out),
+    opacity 220ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .u-reel:hover .u-reel-play {
+    opacity: 0;
+    scale: 0.86;
+  }
+  .u-reel:hover .u-reel-media,
+  .u-reel:hover .u-reel-video {
+    transform: scale(1.03);
+  }
+}
+/* Клавиатурный обход доходит до карточки — отклик тот же, что на наведении. */
+.u-reel:focus-visible .u-reel-play {
+  opacity: 0;
+  scale: 0.86;
+}
+.u-reel:focus-visible .u-reel-media,
+.u-reel:focus-visible .u-reel-video {
+  transform: scale(1.03);
+}
+
+/*
+  Отказ по согласию. Краснеет не только подпись, но и сама рамка отметки:
+  жалуются именно на неё, и взгляд должен попасть на квадратик, а не только
+  на текст рядом. Кольцо снаружи, поэтому размер отметки не меняется и
+  строка не дёргается.
+*/
+.u-consent-box[aria-invalid="true"] {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.125rem rgb(219 64 79 / 0.2);
+}
+
+/*
+  Область нажатия шире самой отметки: квадрат 18×18 виден как есть, но ловит
+  палец на 44×44 — псевдоэлемент растянут вокруг, ничего при этом не сдвигая.
+*/
+.u-consent-box {
+  position: relative;
+  cursor: pointer;
+}
+.u-consent-box::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2.75rem;
+  height: 2.75rem;
+  translate: -50% -50%;
+}
+
+/*
+  Ссылка на документ внутри строки согласия. Это <button>, а не <a>: документ
+  открывается модалкой на месте, и уводить человека со страницы посреди
+  заполнения формы незачем. Подчёркивание постоянное, а не по наведению —
+  на отметке согласия должно быть сразу видно, что условия можно прочитать.
+
+  Наследует кегль и начертание у строки, в которую вставлена, иначе ссылка
+  выпадала бы из неё: preflight сбрасывает у кнопок и то, и другое.
+*/
+.u-legal-link {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--color-primary);
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  cursor: pointer;
+  transition: color 200ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .u-legal-link:hover {
+    color: var(--color-primary-hover);
+  }
+}
+
+/* Редакция документа — её же отправляют вместе с отметкой согласия. */
+.u-legal-version {
+  margin-top: 1.8em;
+  padding-top: 1em;
+  border-top: 1px solid var(--color-border-soft);
+  font-size: 0.86em;
+  color: var(--color-ink-muted);
+}
+.u-legal-body h3 {
+  margin-bottom: 0.5em;
+  font-weight: 700;
+  font-size: 1.05em;
+}
+.u-legal-body p + p,
+.u-legal-body ul,
+.u-legal-body dl {
+  margin-top: 0.6em;
+}
+.u-legal-body li {
+  position: relative;
+  padding-left: 1.1em;
+  color: var(--color-ink-secondary);
+}
+.u-legal-body li + li {
+  margin-top: 0.3em;
+}
+.u-legal-body li::before {
+  content: "·";
+  position: absolute;
+  left: 0.3em;
+}
+.u-legal-body p {
+  color: var(--color-ink-secondary);
+}
+.u-legal-body dl > div {
+  display: flex;
+  gap: 1em;
+  padding: 0.45em 0;
+  border-top: 1px solid var(--color-border-soft);
+}
+.u-legal-body dl > div:first-child {
+  border-top: 0;
+}
+.u-legal-body dt {
+  flex: 0 0 11em;
+  color: var(--color-ink-muted);
+}
+.u-legal-body dd {
+  font-weight: 600;
+}
+
+/* ── Доступность ────────────────────────────────────────────── */
+
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 0.1875rem solid var(--color-primary);
+  outline-offset: 0.1875rem;
+  border-radius: var(--radius-xs);
+}
+
+.u-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+  Фоновое видео hero играет всегда, в том числе при prefers-reduced-motion.
+  Раньше оно здесь пряталось — и на машинах с выключенными анимациями Windows
+  (а это частая настройка) вместо ролика оставался постер. Ролик — ключевой
+  визуал страницы, поэтому решение осознанное; если понадобится уважать
+  системную настройку, правильнее не прятать видео, а не запускать его
+  автоматически и дать кнопку воспроизведения.
+*/
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

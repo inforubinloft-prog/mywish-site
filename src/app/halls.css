@@ -1,0 +1,821 @@
+/* ─────────────────────────────────────────────────────────────
+   Страница залов
+
+   Продолжение главной: те же токены — цвета, шрифты, радиусы, тени, кривые
+   движения и отклик на наведение. Отличается только раскладка. Главная
+   собрана абсолютными координатами макета, здесь их нет и быть не может:
+   у залов разное число фотографий и разной длины подписи, координаты
+   пришлось бы пересчитывать после каждой замены снимка. Поэтому поток и
+   сетка — но в той же колонке 130…1310, что и вся главная, и в тех же
+   макетных единицах (1rem = 16px макета), так что масштаб общий.
+   ───────────────────────────────────────────────────────────── */
+
+.halls-page {
+  background: var(--color-blush);
+}
+
+/* ── Первый экран ───────────────────────────────────────────── */
+
+/*
+  78svh, а не 100: это обложка раздела, а не титульный экран сайта. Следующий
+  блок должен выглядывать снизу — иначе страница выглядит как ещё одна главная
+  и непонятно, что её надо листать.
+*/
+.halls-hero {
+  position: relative;
+  height: 78svh;
+  min-height: 34rem;
+  overflow: clip;
+  background: var(--color-navy);
+}
+
+.halls-hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*
+  Заливка слева — та же мысль, что у розовой вуали на главной, но темнее:
+  заголовок здесь белый и стоит поверх подвижного кадра, а кадры в ролике
+  меняются от светлых залов к тёмным.
+*/
+/*
+  Заливка держит левую треть кадра тёмной — на ней стоит белый заголовок.
+  Первая версия была слабее и обрывалась к середине; ролик проходит и по
+  светлым залам («Вайт», «Барби»), и на них заголовок расплывался. Плотность
+  подобрана по самому светлому кадру ролика, поэтому на тёмных залах она
+  просто незаметна.
+*/
+.halls-hero-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgb(14 23 54 / 0.92) 0%,
+    rgb(14 23 54 / 0.82) 30%,
+    rgb(14 23 54 / 0.5) 58%,
+    rgb(14 23 54 / 0.14) 82%,
+    rgb(14 23 54 / 0) 100%
+  );
+}
+
+/*
+  Шапка на этом первом экране стоит на тёмной заливке, поэтому носит ту же
+  тёмную схему, что плавающая шапка над синей полосой на главной: логотип
+  белый (он одноцветный, фильтром — без второго файла), плашки соцсетей
+  плотные (значок телеграма наполовину нарисован тем же тёмным цветом),
+  пилюля телефона красная — тёмно-синяя сливалась бы с заливкой.
+*/
+.halls-hero .site-header-logo {
+  filter: brightness(0) invert(1);
+}
+.halls-hero .site-header-chip {
+  background-color: rgb(255 249 247 / 0.92);
+  border-color: rgb(255 255 255 / 0.5);
+}
+.halls-hero .u-header-phone {
+  background-color: var(--color-primary);
+}
+@media (hover: hover) and (pointer: fine) {
+  .halls-hero .u-header-phone:hover {
+    background-color: var(--color-primary-hover);
+  }
+}
+
+.halls-hero-copy {
+  position: absolute;
+  top: 50%;
+  left: 8.1875rem;
+  width: 40rem;
+  translate: 0 -50%;
+  z-index: 10;
+}
+
+/*
+  Заголовок здесь белый, а не тёмно-синий: он лежит на видео. Акцентная
+  строка остаётся фирменной красной — она читается и на тёмном.
+
+  Выравнивание по левому краю задано явно: на главной этот же заголовок стоит
+  по центру секции, и без сброса обе строки центрировались друг относительно
+  друга — короткая «Девять залов» уезжала вправо от длинной.
+*/
+.halls-hero-copy .u-heading {
+  color: var(--color-surface);
+  text-align: left;
+}
+
+.halls-hero-lede {
+  margin-top: 1.5rem;
+  width: 30rem;
+  font-family: var(--font-sans);
+  font-size: var(--text-hero-lede);
+  line-height: var(--text-hero-lede--line-height);
+  color: rgb(255 255 255 / 0.88);
+}
+
+/* ── Тело страницы ──────────────────────────────────────────── */
+
+/*
+  Стык с первым экраном.
+
+  Сначала здесь стоял такой же длинный фейд, как на главной, — и выглядел
+  плохо: на главной он растворяет кадр в фон страницы, а тут под ним сразу
+  начинается светлый блок, и получалась мутная полоса в треть экрана.
+
+  Вместо растворения — композиция: светлая панель наезжает на низ ролика
+  скруглённым краем. Ролик обрезается чисто, стык читается как задумка,
+  а не как недоделанный градиент.
+*/
+.halls-body {
+  position: relative;
+  z-index: 2;
+  margin-top: -3.5rem;
+  padding-block: 4rem 5rem;
+  border-radius: 2rem 2rem 0 0;
+  background: var(--color-blush);
+  box-shadow: 0 -1rem 2.5rem rgb(14 23 54 / 0.16);
+}
+
+.halls-body-inner {
+  position: relative;
+}
+
+/* ── Площадка и её залы ─────────────────────────────────────── */
+
+/*
+  Сетка на всю секцию, а не отдельная обёртка вокруг карточек: так у каждой
+  карточки свой прямой родитель-секция, и появление при прокрутке разбирает
+  их поштучно, лесенкой (см. ScrollReveal — он берёт прямых детей секции).
+*/
+.halls-location {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.875rem;
+  width: 73.75rem;
+  margin: 0 auto;
+  padding-inline: 0;
+}
+
+.halls-location + .halls-location {
+  margin-top: 4.5rem;
+}
+
+.halls-location-head {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 1.125rem;
+  padding-bottom: 0.25rem;
+}
+
+.halls-location-n {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.0625rem;
+}
+
+.halls-location-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: var(--text-d-s);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  color: var(--color-ink);
+}
+
+.halls-location-metro {
+  margin-top: 0.25rem;
+  font-family: var(--font-sans);
+  font-size: var(--text-m);
+  color: var(--color-ink-muted);
+}
+
+.halls-location-map {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  height: 2.125rem;
+  padding-inline: 1rem;
+  border: 0.0625rem solid var(--color-border-soft);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: var(--color-ink);
+}
+.halls-location-map svg {
+  width: 0.625rem;
+  margin-left: 0.4375rem;
+}
+
+/* ── Карточка зала ──────────────────────────────────────────── */
+
+.halls-card {
+  scroll-margin-top: 8.25rem;
+}
+
+.halls-card-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card-lg);
+  aspect-ratio: 3 / 2;
+  background: var(--color-surface-alt);
+  translate: 0 0;
+  transition:
+    opacity 200ms var(--ease-out),
+    filter 200ms var(--ease-out),
+    translate 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-out);
+}
+
+/*
+  Фотография — сама по себе кнопка во весь кадр: нажимать хочется по снимку,
+  а не по подписи под ним. Стрелки листания лежат поверх отдельными кнопками,
+  вложенных кнопок в разметке не бывает.
+*/
+.halls-card-open {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.halls-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale 500ms var(--ease-out);
+}
+
+/*
+  Стрелки появляются под курсором. Всё время висеть им незачем — обложка
+  важнее, — но и прятать совсем нельзя: без них непонятно, что кадр не один.
+  Поэтому счётчик «3 / 15» виден всегда, а стрелки проступают на наведении.
+*/
+.halls-card-nav {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  translate: 0 -50%;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.92);
+  color: var(--color-navy);
+  cursor: pointer;
+  opacity: 0;
+  box-shadow: 0 0.25rem 0.75rem rgb(14 23 54 / 0.28);
+  transition:
+    opacity 200ms var(--ease-out),
+    background-color 200ms var(--ease-out),
+    color 200ms var(--ease-out),
+    scale 200ms var(--ease-out);
+}
+.halls-card-nav svg {
+  width: 0.4375rem;
+}
+.halls-card-prev {
+  left: 0.75rem;
+}
+.halls-card-next {
+  right: 0.75rem;
+}
+
+/* Подгружаемые заранее соседние кадры — вне глаз и вне обхода. */
+.halls-card-preload {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.halls-card-count {
+  position: absolute;
+  right: 0.875rem;
+  bottom: 0.875rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-pill);
+  background: rgb(14 23 54 / 0.62);
+  backdrop-filter: blur(0.5rem);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.6875rem;
+  color: var(--color-surface);
+}
+
+.halls-card-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/*
+  Название акцентным: на странице девять карточек подряд, и тёмно-синие
+  заголовки сливались с подписями адресов над ними. Розовый закрепляет за
+  названием роль имени зала, а не строки текста.
+*/
+.halls-card-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.875rem;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--color-primary);
+  transition: color 220ms var(--ease-out);
+}
+
+/* Бронь — акцентная пилюля, как «выбрать» в карточках пакетов на главной. */
+.halls-card-book {
+  margin-left: auto;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  height: 2.25rem;
+  padding-inline: 1.125rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  translate: 0 0;
+  transition:
+    background-color 200ms var(--ease-out),
+    box-shadow 200ms var(--ease-out),
+    translate 200ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .halls-card:hover .halls-card-frame {
+    translate: 0 -0.375rem;
+    box-shadow: 0 1.25rem 2.5rem rgb(67 38 50 / 0.18);
+  }
+  .halls-card:hover .halls-card-img {
+    scale: 1.04;
+  }
+  .halls-card:hover .halls-card-title {
+    color: var(--color-primary-pressed);
+  }
+  .halls-card-frame:hover .halls-card-nav {
+    opacity: 1;
+  }
+  .halls-card-nav:hover {
+    background: var(--color-primary);
+    color: var(--color-surface);
+    scale: 1.08;
+  }
+  .halls-card-book:hover {
+    background: var(--color-navy);
+    translate: 0 -0.125rem;
+    box-shadow: 0 0.375rem 0.875rem rgb(14 23 54 / 0.32);
+  }
+  /*
+    Приглушённая кнопка под курсором оживает: выбор можно сменить, и об этом
+    нужно сказать раньше, чем человек начнёт искать, где отменить прежний.
+  */
+  .halls-card-book[data-dim="true"]:hover {
+    opacity: 1;
+    filter: none;
+  }
+}
+
+/*
+  Выбранный зал. Кнопка меняет заливку на тёмно-синюю и получает галочку —
+  та же пара, что у выбранного пакета: тёмное на светлом читается как
+  «решено», красное — как «нажми».
+*/
+.halls-card-book[data-picked="true"] {
+  background: var(--color-navy);
+  box-shadow: 0 0.375rem 0.875rem rgb(14 23 54 / 0.28);
+}
+
+.halls-card-book[data-picked="true"]::before {
+  content: "";
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-right: 0.4rem;
+  background: currentColor;
+  /* Галочка рисуется маской: отдельная иконка ради двенадцати пикселей лишняя. */
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m3.5 8.4 3 3 6-6.4' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}
+
+/* Зал уже выбран — прочие кнопки отходят на второй план. */
+.halls-card-book[data-dim="true"] {
+  opacity: 0.42;
+  filter: saturate(0.5);
+}
+
+/* Клавиатура доходит до стрелок табом — там они нужны видимыми. */
+.halls-card-nav:focus-visible {
+  opacity: 1;
+}
+
+/*
+  Нажатие проседает на пиксель. У стрелок в translate уже стоит вертикальное
+  центрирование (-50%), и писать сюда просто «0 0.0625rem» нельзя: это
+  затирало центрирование целиком, и кнопка на нажатии прыгала вниз на
+  пол-своей-высоты. Выглядело как сильный отскок, а заодно уводило кнопку
+  из-под курсора — второй клик подряд мог уже не попасть по ней.
+*/
+.halls-card-nav:active {
+  translate: 0 calc(-50% + 0.0625rem);
+}
+
+.halls-card-book:active {
+  translate: 0 0.0625rem;
+}
+
+
+/* ── Просмотр фотографий ────────────────────────────────────── */
+
+/*
+  Как у юридических документов: <dialog> с showModal(), браузер сам запирает
+  фокус и закрывает по Escape. Размеры в vw/vh, а не в макетных единицах —
+  кадр должен занимать окно целиком независимо от масштаба сцены.
+*/
+.halls-viewer {
+  width: min(92vw, 78rem);
+  max-height: 92vh;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: visible;
+}
+.halls-viewer::backdrop {
+  background: rgb(14 23 54 / 0.82);
+  backdrop-filter: blur(0.375rem);
+}
+.halls-viewer[open] {
+  animation: halls-viewer-in 240ms var(--ease-out);
+}
+@keyframes halls-viewer-in {
+  from {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+
+/*
+  Панель принимает фокус при открытии окна — чтобы Escape и стрелки работали
+  сразу, а фокус не улетал на ссылку «на карте». Контур ей при этом не нужен:
+  фокус сюда ставит скрипт, а не человек табом, и окно уже выделено
+  затемнением фона. Общее правило доступности бьёт по [tabindex], поэтому
+  снимаем поимённо и с тем же :focus-visible — иначе оно сильнее.
+*/
+.halls-viewer-panel,
+.halls-viewer-panel:focus-visible {
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/*
+  Название зала крупно и по центру: в окне он главный, а не подпись сбоку.
+  Кегль взят из шкалы заголовков секций (d-m, 45), поэтому шапка окна
+  выглядит роднёй заголовков страницы, а не отдельной затеей.
+*/
+.halls-viewer-head {
+  text-align: center;
+  color: var(--color-surface);
+}
+.halls-viewer-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: var(--text-d-m);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  /* Тем же акцентом, что названия в карточках: это одно и то же имя зала. */
+  color: var(--color-primary);
+}
+.halls-viewer-sub {
+  margin-top: 0.375rem;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: rgb(255 255 255 / 0.7);
+}
+.halls-viewer-sub a {
+  color: var(--color-blush);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+/*
+  Переключатель «Фото / Схема» — пилюля из двух половин, как переключатель
+  часов в калькуляторе на главной: тот же радиус, тот же акцент на выбранном.
+*/
+.halls-viewer-modes {
+  display: flex;
+  gap: 0.375rem;
+  align-self: center;
+  padding: 0.25rem;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.12);
+}
+
+.halls-viewer-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  height: 2rem;
+  padding-inline: 1rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: rgb(255 255 255 / 0.72);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition:
+    background-color 180ms var(--ease-out),
+    color 180ms var(--ease-out);
+}
+.halls-viewer-mode span {
+  padding-inline: 0.375rem;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.16);
+  font-size: 0.6875rem;
+}
+.halls-viewer-mode[aria-pressed="true"] {
+  background: var(--color-surface);
+  color: var(--color-navy);
+}
+.halls-viewer-mode[aria-pressed="true"] span {
+  background: var(--color-blush);
+  color: var(--color-primary);
+}
+@media (hover: hover) and (pointer: fine) {
+  .halls-viewer-mode[aria-pressed="false"]:hover {
+    background: rgb(255 255 255 / 0.14);
+    color: var(--color-surface);
+  }
+}
+
+.halls-viewer-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+/*
+  Схема — разрез с прозрачным фоном. На тёмной подложке окна прозрачность
+  показала бы сам разрез висящим в пустоте, а светлые стены слились бы с
+  краем. Поэтому под схему кладём светлую плашку — ту же, что фон страницы.
+*/
+.halls-viewer-stage[data-mode="plans"] .halls-viewer-img {
+  background: var(--color-blush);
+  padding: 1.25rem;
+  object-fit: contain;
+}
+
+.halls-viewer-img {
+  max-width: 100%;
+  max-height: 74vh;
+  border-radius: var(--radius-lg);
+  background: var(--color-navy);
+  object-fit: contain;
+  animation: halls-shot-in 220ms var(--ease-out);
+}
+@keyframes halls-shot-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Соседние кадры держим загруженными, но вне глаз. */
+.halls-viewer-preload {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.halls-viewer-arrow {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  translate: 0 -50%;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.9);
+  color: var(--color-navy);
+  cursor: pointer;
+  box-shadow: 0 0.5rem 1.25rem rgb(0 0 0 / 0.28);
+  transition:
+    background-color 180ms var(--ease-out),
+    color 180ms var(--ease-out),
+    scale 180ms var(--ease-out);
+}
+.halls-viewer-arrow svg {
+  width: 0.5rem;
+}
+.halls-viewer-prev {
+  left: -1.5rem;
+}
+.halls-viewer-next {
+  right: -1.5rem;
+}
+@media (hover: hover) and (pointer: fine) {
+  .halls-viewer-arrow:hover {
+    background: var(--color-primary);
+    color: var(--color-surface);
+    scale: 1.08;
+  }
+}
+.halls-viewer-arrow:active {
+  scale: 1;
+}
+
+/*
+  Половины кадра, которыми он листается. Прозрачные накладки поверх
+  фотографии и под стрелками: стрелка остаётся кнопкой, а промах по ней
+  всё равно листает в ту же сторону.
+*/
+.halls-viewer-half {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 50%;
+  cursor: pointer;
+}
+.halls-viewer-half-prev {
+  left: 0;
+}
+.halls-viewer-half-next {
+  right: 0;
+}
+
+/* Стрелки — над накладками, чтобы нажатие по ним считалось нажатием по ним. */
+.halls-viewer-arrow {
+  z-index: 3;
+}
+
+.halls-viewer-foot {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.875rem;
+}
+
+.halls-viewer-book {
+  margin-left: 0;
+  height: 2.625rem;
+  padding-inline: 1.5rem;
+  font-size: 0.9375rem;
+}
+
+
+/* ── Подвал страницы ────────────────────────────────────────── */
+
+.halls-footer {
+  padding-bottom: 3rem;
+}
+
+.halls-footer-inner {
+  display: block;
+}
+
+.halls-cta {
+  display: flex;
+  align-items: center;
+  width: 73.75rem;
+  margin: 0 auto;
+  padding-inline: 2.75rem;
+  height: 8.1875rem;
+  border-radius: var(--radius-lg);
+}
+.halls-cta-btn {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14.875rem;
+  height: 3.9375rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.3125rem;
+  letter-spacing: 0.02em;
+}
+
+.halls-footer-cols {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  width: 73.75rem;
+  margin: 2.5rem auto 0;
+  padding: 2.25rem 2.75rem;
+  border-radius: var(--radius-lg);
+  background: rgb(255 255 255 / 0.4);
+}
+
+.halls-footer-head {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.halls-footer-link {
+  display: block;
+  margin-top: 0.625rem;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--color-ink);
+  transition: color 200ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .halls-footer-link:hover {
+    color: var(--color-primary);
+  }
+}
+.halls-footer-legal {
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.halls-footer-msgr {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.875rem;
+}
+.halls-footer-msgr .u-msgr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+}
+.halls-footer-msgr img {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ── Сниженная анимация ─────────────────────────────────────── */
+
+/*
+  Общее правило доступности глушит длительности у всего подряд. Здесь та же
+  политика, что на главной: отклик на наведение и появление кадра — это
+  подсказки, а не украшение, поэтому длительности возвращаем поимённо.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .halls-card-frame,
+  .halls-card-nav,
+  .halls-card-book,
+  .halls-card-title,
+  .halls-viewer-mode,
+  .halls-footer-link,
+  .halls-viewer-arrow {
+    transition-duration: 220ms !important;
+  }
+  .halls-card-img {
+    transition-duration: 500ms !important;
+  }
+  .halls-viewer[open] {
+    animation-duration: 240ms !important;
+  }
+  .halls-viewer-img {
+    animation-duration: 220ms !important;
+  }
+}

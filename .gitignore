@@ -1,0 +1,30 @@
+node_modules
+.next
+out
+next-env.d.ts
+*.tsbuildinfo
+.DS_Store
+
+# секреты (ключи amoCRM и т.п.) — только на сервере, не в репозитории
+.env
+.env.*
+!.env.example
+
+# исходники медиа: в сайт идут их веб-версии из public/
+/фото залов/
+/видео reels/
+/видео для залов/
+/видео пролет к залам/
+/пакеты модалка/
+/undefined/
+/*.mp4
+/чеклист.png
+/Manrope/static/
+
+# рабочие снимки для сверки с макетом
+/docs/shots/
+/docs/ref/
+/docs/figma-ref/
+
+# настройки локального окружения
+/.claude/

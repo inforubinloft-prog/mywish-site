@@ -1,0 +1,325 @@
+{
+  "page": {
+    "clientW": 1440,
+    "docH": 11580,
+    "sections": [
+      {
+        "id": "hero",
+        "top": 0,
+        "h": 960
+      },
+      {
+        "id": "halls",
+        "top": 960,
+        "h": 959
+      },
+      {
+        "id": "gallery",
+        "top": 1919,
+        "h": 2218
+      },
+      {
+        "id": "manager",
+        "top": 4137,
+        "h": 723
+      },
+      {
+        "id": "packages",
+        "top": 4860,
+        "h": 960
+      },
+      {
+        "id": "date-price",
+        "top": 5820,
+        "h": 960
+      },
+      {
+        "id": "contact",
+        "top": 6780,
+        "h": 960
+      },
+      {
+        "id": "how",
+        "top": 7740,
+        "h": 960
+      },
+      {
+        "id": "where",
+        "top": 8700,
+        "h": 960
+      },
+      {
+        "id": "faq",
+        "top": 9660,
+        "h": 960
+      },
+      {
+        "id": "footer",
+        "top": 10620,
+        "h": 960
+      }
+    ]
+  },
+  "deltas": [
+    {
+      "name": "hero / логотип",
+      "figma": "131 / 37 / 173.5 / 68.583",
+      "code": "131 / 37 / 173.5 / 68.58",
+      "delta": "0 / 0 / 0 / 0",
+      "status": "OK"
+    },
+    {
+      "name": "hero / навигация",
+      "figma": "567.07 / 52.03 / 306.87 / 38.97",
+      "code": "567.06 / 52.02 / 306.86 / 38.97",
+      "delta": "-0.01 / -0.01 / -0.01 / 0",
+      "status": "OK"
+    },
+    {
+      "name": "hero / H1",
+      "figma": "131 / 296.13 / — / 183.738",
+      "code": "131 / 296.13 / 1180 / 183.75",
+      "delta": "0 / 0 / — / 0.01",
+      "status": "OK"
+    },
+    {
+      "name": "hero / подзаголовок",
+      "figma": "131 / 499 / — / 66",
+      "code": "131 / 499 / 1180 / 66",
+      "delta": "0 / 0 / — / 0",
+      "status": "OK"
+    },
+    {
+      "name": "hero / CTA «СВЯЗАТЬСЯ»",
+      "figma": "— / — / — / —",
+      "code": "131 / 616 / 192.95 / 41.03",
+      "delta": "— / — / — / —",
+      "status": "OK"
+    },
+    {
+      "name": "halls / заголовок",
+      "figma": "131 / 1037 / — / 140",
+      "code": "131 / 1037 / 1180 / 140",
+      "delta": "0 / 0 / — / 0",
+      "status": "OK"
+    },
+    {
+      "name": "halls / подзаголовок",
+      "figma": "131 / 1189.88 / — / 28",
+      "code": "131 / 1189.88 / 1180 / 28",
+      "delta": "0 / -0.01 / — / 0",
+      "status": "OK"
+    },
+    {
+      "name": "halls / фото 812:104",
+      "figma": "63.5 / 1201.33 / 551.339 / 646.003",
+      "code": "63.5 / 1201.33 / 551.33 / 646",
+      "delta": "0 / 0 / -0.01 / 0",
+      "status": "OK"
+    },
+    {
+      "name": "halls / CTA",
+      "figma": "607.88 / 1794.68 / 210.636 / 44.799",
+      "code": "607.88 / 1794.67 / 210.63 / 44.8",
+      "delta": "0 / -0.01 / -0.01 / 0",
+      "status": "OK"
+    },
+    {
+      "name": "gallery / заголовок",
+      "figma": "131 / 1997 / — / 100",
+      "code": "131 / 1997 / 1180 / 100",
+      "delta": "0 / 0 / — / 0",
+      "status": "OK"
+    },
+    {
+      "name": "gallery / reels 1",
+      "figma": "131 / 3383 / 380 / 675.555",
+      "code": "131 / 3383 / 380 / 675.55",
+      "delta": "0 / 0 / 0 / -0.01",
+      "status": "OK"
+    },
+    {
+      "name": "manager / текст",
+      "figma": "343 / 4397 / 520 / 319",
+      "code": "343 / 4397 / 520 / 319",
+      "delta": "0 / 0 / 0 / 0",
+      "status": "OK"
+    },
+    {
+      "name": "manager / фото 837:90",
+      "figma": "833 / 4333 / 259 / 494",
+      "code": "833 / 4333 / 259 / 494",
+      "delta": "0 / 0 / 0 / 0",
+      "status": "OK"
+    },
+    {
+      "name": "packages / карточка 1",
+      "figma": "131 / 5101 / 325 / 699",
+      "code": "131 / 5101 / 325 / 699",
+      "delta": "0 / 0 / 0 / 0",
+      "status": "OK"
+    },
+    {
+      "name": "packages / карточка 2",
+      "figma": "557 / 5101 / 325 / 699",
+      "code": "557 / 5101 / 325 / 699",
+      "delta": "0 / 0 / 0 / 0",
+      "status": "OK"
+    },
+    {
+      "name": "packages / карточка 3",
+      "figma": "986 / 5100 / 325 / 701",
+      "code": "986 / 5100 / 325 / 701",
+      "delta": "0 / 0 / 0 / 0",
+      "status": "OK"
+    },
+    {
+      "name": "date / «Твой пакет»",
+      "figma": "271 / 6156 / 289.508 / —",
+      "code": "271 / 6156 / 289.5 / 220.02",
+      "delta": "0 / 0 / -0.01 / —",
+      "status": "OK"
+    },
+    {
+      "name": "date / «Сколько часов»",
+      "figma": "271 / 6376.85 / 289.508 / —",
+      "code": "271 / 6376.84 / 289.5 / 121.86",
+      "delta": "0 / -0.01 / -0.01 / —",
+      "status": "OK"
+    },
+    {
+      "name": "date / календарь",
+      "figma": "578.79 / 6081.85 / 591.207 / —",
+      "code": "578.78 / 6081.84 / 591.2 / 537.86",
+      "delta": "-0.01 / -0.01 / 0 / —",
+      "status": "OK"
+    },
+    {
+      "name": "date / итого",
+      "figma": "271 / 6623.27 / 899 / —",
+      "code": "271 / 6623.27 / 899 / 107.77",
+      "delta": "0 / 0 / 0 / —",
+      "status": "OK"
+    }
+  ],
+  "typeRows": [
+    {
+      "name": "hero / H1",
+      "want": "{\"fontSize\":\"68.816px\",\"lineHeight\":\"61.246px\",\"fontWeight\":\"900\",\"letterSpacing\":\"2.7526px\",\"color\":\"rgb(14, 23, 54)\"}",
+      "got": "{\"fontSize\":\"68.816px\",\"lineHeight\":\"61.246px\",\"fontWeight\":\"900\",\"letterSpacing\":\"2.7526px\",\"color\":\"rgb(14, 23, 54)\"}",
+      "status": "OK"
+    },
+    {
+      "name": "hero / подзаголовок",
+      "want": "{\"fontSize\":\"24px\",\"lineHeight\":\"33px\",\"fontWeight\":\"500\",\"letterSpacing\":\"0.96px\",\"color\":\"rgb(14, 23, 54)\"}",
+      "got": "{\"fontSize\":\"24px\",\"lineHeight\":\"33px\",\"fontWeight\":\"500\",\"letterSpacing\":\"0.96px\",\"color\":\"rgb(14, 23, 54)\"}",
+      "status": "OK"
+    },
+    {
+      "name": "halls / заголовок",
+      "want": "{\"fontSize\":\"78px\",\"lineHeight\":\"70px\",\"fontWeight\":\"900\",\"letterSpacing\":\"3.12px\",\"color\":\"rgb(14, 23, 54)\"}",
+      "got": "{\"fontSize\":\"78px\",\"lineHeight\":\"70px\",\"fontWeight\":\"900\",\"letterSpacing\":\"3.12px\",\"color\":\"rgb(14, 23, 54)\"}",
+      "status": "OK"
+    },
+    {
+      "name": "gallery / заголовок",
+      "want": "{\"fontSize\":\"60px\",\"lineHeight\":\"50px\",\"fontWeight\":\"900\",\"letterSpacing\":\"2.4px\",\"color\":\"rgb(14, 23, 54)\"}",
+      "got": "{\"fontSize\":\"60px\",\"lineHeight\":\"50px\",\"fontWeight\":\"900\",\"letterSpacing\":\"2.4px\",\"color\":\"rgb(14, 23, 54)\"}",
+      "status": "OK"
+    },
+    {
+      "name": "packages / пункт списка",
+      "want": "{\"fontSize\":\"15px\",\"lineHeight\":\"19px\",\"fontWeight\":\"500\"}",
+      "got": "{\"fontSize\":\"15px\",\"lineHeight\":\"19px\",\"fontWeight\":\"500\"}",
+      "status": "OK"
+    },
+    {
+      "name": "packages / цена",
+      "want": "{\"fontSize\":\"25.357px\",\"fontWeight\":\"800\"}",
+      "got": "{\"fontSize\":\"25.357px\",\"fontWeight\":\"800\"}",
+      "status": "OK"
+    },
+    {
+      "name": "date / итоговая сумма",
+      "want": "{\"fontSize\":\"42.664px\",\"lineHeight\":\"42.664px\",\"fontWeight\":\"800\"}",
+      "got": "{\"fontSize\":\"42.664px\",\"lineHeight\":\"42.664px\",\"fontWeight\":\"800\"}",
+      "status": "OK"
+    }
+  ],
+  "diffs": [
+    {
+      "key": "1-hero",
+      "refSize": "1440×960",
+      "diffPct": 1.08
+    },
+    {
+      "key": "2-halls",
+      "refSize": "1440×959",
+      "diffPct": 1.55
+    },
+    {
+      "key": "3-gallery",
+      "refSize": "935×1440",
+      "diffPct": 1.73
+    },
+    {
+      "key": "4-manager",
+      "refSize": "1440×723",
+      "diffPct": 1.32
+    },
+    {
+      "key": "5-packages",
+      "refSize": "1440×960",
+      "diffPct": 5.03
+    },
+    {
+      "key": "6-date-price",
+      "refSize": "1440×960",
+      "diffPct": 2.73
+    }
+  ],
+  "responsive": [
+    {
+      "width": 360,
+      "scrollW": 360,
+      "clientW": 360,
+      "docH": 15690,
+      "overflowing": [],
+      "hScroll": false
+    },
+    {
+      "width": 768,
+      "scrollW": 768,
+      "clientW": 768,
+      "docH": 13113,
+      "overflowing": [],
+      "hScroll": false
+    },
+    {
+      "width": 1024,
+      "scrollW": 1024,
+      "clientW": 1024,
+      "docH": 13242,
+      "overflowing": [],
+      "hScroll": false
+    },
+    {
+      "width": 1440,
+      "scrollW": 1440,
+      "clientW": 1440,
+      "docH": 11580,
+      "overflowing": [],
+      "hScroll": false
+    },
+    {
+      "width": 1920,
+      "scrollW": 1920,
+      "clientW": 1920,
+      "docH": 11580,
+      "overflowing": [],
+      "hScroll": false
+    }
+  ],
+  "consoleErrors": [],
+  "failedRequests": []
+}

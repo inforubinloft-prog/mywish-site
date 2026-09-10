@@ -1,0 +1,9 @@
+<svg preserveAspectRatio="none" width="1440" height="3361" viewBox="0 0 1440 3361" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path id="Rectangle 10" d="M-45.3081 3136.34C-176.999 3365.84 763 3358.84 763 3358.84C1189.5 3367.34 1391.5 3339.34 1547 3136.34C1547 3136.34 2058.5 -159.497 1441 26.7615C823.501 213.02 230.747 218.853 -45.3082 10.0667C-321.363 -198.719 86.3831 2906.84 -45.3081 3136.34Z" fill="url(#packages_band)"/>
+<defs>
+<linearGradient id="packages_band" x1="720" y1="0" x2="720" y2="3361" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFF1F2"/>
+<stop offset="1" stop-color="#FFF9F7"/>
+</linearGradient>
+</defs>
+</svg>

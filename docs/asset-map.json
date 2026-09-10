@@ -1,0 +1,572 @@
+[
+  {
+    "const": "imgImage86",
+    "url": "https://www.figma.com/api/mcp/asset/e3095397-b102-4035-b5f1-4bec86579ba2.png",
+    "sections": [
+      "6-date-price"
+    ],
+    "figmaNames": [
+      "image 86"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgButton",
+    "url": "https://www.figma.com/api/mcp/asset/372e45f6-618c-4e4f-a318-086bf099a04b.svg",
+    "sections": [
+      "6-date-price"
+    ],
+    "figmaNames": [
+      "Button - Предыдущий месяц"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgButton1",
+    "url": "https://www.figma.com/api/mcp/asset/66a49d28-9ca3-4ccf-8358-d344094a2977.svg",
+    "sections": [
+      "6-date-price"
+    ],
+    "figmaNames": [
+      "Button - Следующий месяц"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage84",
+    "url": "https://www.figma.com/api/mcp/asset/f66d49e4-071c-4d37-b0a3-c9476143c15d.png",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [
+      "image 84"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage112",
+    "url": "https://www.figma.com/api/mcp/asset/3ee215be-a82f-4c0a-82db-15f2aeef796b.png",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [
+      "image 112"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgLine1",
+    "url": "https://www.figma.com/api/mcp/asset/86cf2f6a-44bb-4313-828a-33a5d09baa4b.svg",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [],
+    "count": 1
+  },
+  {
+    "const": "imgLine2",
+    "url": "https://www.figma.com/api/mcp/asset/e5c7e5d6-6ba8-498a-836f-a3584c976b14.svg",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [],
+    "count": 1
+  },
+  {
+    "const": "imgLine3",
+    "url": "https://www.figma.com/api/mcp/asset/44d7dce0-882f-41e0-bb8b-f14953443874.svg",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [],
+    "count": 1
+  },
+  {
+    "const": "imgVector",
+    "url": "https://www.figma.com/api/mcp/asset/e9ac44c1-6a96-4546-afdd-2a1ee39d09ef.svg",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [
+      "Vector"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage113",
+    "url": "https://www.figma.com/api/mcp/asset/8ce73841-a8b5-437f-b077-e0f28116b3b9.png",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [
+      "image 113"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgLine4",
+    "url": "https://www.figma.com/api/mcp/asset/ed3ce84c-0aaa-4ff8-91e0-07d88c930e14.svg",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [],
+    "count": 1
+  },
+  {
+    "const": "imgLine5",
+    "url": "https://www.figma.com/api/mcp/asset/f2d8568e-7451-46bb-8d65-777d5cee73d6.svg",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [],
+    "count": 1
+  },
+  {
+    "const": "imgLine6",
+    "url": "https://www.figma.com/api/mcp/asset/c8732429-84c7-4819-bbd0-ce48dfffd6c4.svg",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [],
+    "count": 1
+  },
+  {
+    "const": "imgVector1",
+    "url": "https://www.figma.com/api/mcp/asset/20b8205b-8b1a-43a3-bb24-d88fa1a9270a.svg",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [
+      "Vector"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage111",
+    "url": "https://www.figma.com/api/mcp/asset/f8a95eb0-40ad-4327-8cf8-0e895599fb50.png",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [
+      "image 111"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgLine7",
+    "url": "https://www.figma.com/api/mcp/asset/ca534c45-cf7d-465a-b35a-b89f1af6d0e2.svg",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [],
+    "count": 1
+  },
+  {
+    "const": "imgLine8",
+    "url": "https://www.figma.com/api/mcp/asset/fead017a-c697-4e6c-aae4-9efb65060591.svg",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [],
+    "count": 1
+  },
+  {
+    "const": "imgLine9",
+    "url": "https://www.figma.com/api/mcp/asset/6494d276-56be-4fdd-9260-7ccd66b5727f.svg",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [],
+    "count": 1
+  },
+  {
+    "const": "imgVector2",
+    "url": "https://www.figma.com/api/mcp/asset/b9c31d1b-8dd6-4f40-8a4a-64c84be736f2.svg",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [
+      "Vector"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage116",
+    "url": "https://www.figma.com/api/mcp/asset/c340aea5-0c72-46ee-b165-2943a06b5c44.png",
+    "sections": [
+      "5-packages"
+    ],
+    "figmaNames": [
+      "image 116"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage108",
+    "url": "https://www.figma.com/api/mcp/asset/cf9e36ed-b990-4def-8d04-f2c7c92c985a.png",
+    "sections": [
+      "4-manager"
+    ],
+    "figmaNames": [
+      "image 108"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage107",
+    "url": "https://www.figma.com/api/mcp/asset/62562512-7dea-4406-be7f-9c80c44d32c8.png",
+    "sections": [
+      "4-manager"
+    ],
+    "figmaNames": [
+      "image 107"
+    ],
+    "count": 1
+  },
+  {
+    "const": "img08201",
+    "url": "https://www.figma.com/api/mcp/asset/879028fa-2db5-4748-98f3-66010d3c202e.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "0820 1"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgEllipse18",
+    "url": "https://www.figma.com/api/mcp/asset/a70cd080-1437-4d16-a72b-a54c28b21868.svg",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "0820 1"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgPolygon5",
+    "url": "https://www.figma.com/api/mcp/asset/16cdcd51-6f28-43ce-a598-77dac6e39b11.svg",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [],
+    "count": 1
+  },
+  {
+    "const": "img082031",
+    "url": "https://www.figma.com/api/mcp/asset/e1b31272-7ed3-40ec-a27c-271d3e9598b0.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "0820(3) 1"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgEllipse19",
+    "url": "https://www.figma.com/api/mcp/asset/5e1f8421-748a-464e-a6dc-2660c730b957.svg",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "0820(3) 1"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgPolygon6",
+    "url": "https://www.figma.com/api/mcp/asset/f6d0e05f-32c7-4626-9a3d-2cb4e9cda2ec.svg",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [],
+    "count": 1
+  },
+  {
+    "const": "img082021",
+    "url": "https://www.figma.com/api/mcp/asset/d881f4d2-332f-4697-9c0d-3256b100a18c.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "0820(2) 1"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgEllipse20",
+    "url": "https://www.figma.com/api/mcp/asset/8d50a9d9-1745-4200-818d-b0341e2ef4d7.svg",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "0820(2) 1"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgPolygon7",
+    "url": "https://www.figma.com/api/mcp/asset/011e2ab2-b727-4591-8556-bde7ce0e1457.svg",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [],
+    "count": 1
+  },
+  {
+    "const": "imgImage91",
+    "url": "https://www.figma.com/api/mcp/asset/d759c81b-8e77-4a9e-8389-d76a3ec30371.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "image 91"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage94",
+    "url": "https://www.figma.com/api/mcp/asset/9dcf185b-ceaa-4d53-8e9d-55a6b28aa8f7.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "image 94"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage96",
+    "url": "https://www.figma.com/api/mcp/asset/770cd0aa-e5b6-48be-b92c-e6ac6b40a60e.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "image 96"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage92",
+    "url": "https://www.figma.com/api/mcp/asset/fe545f11-7384-4d29-8df9-36a4104e5924.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "image 92"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage98",
+    "url": "https://www.figma.com/api/mcp/asset/5d5d710b-2498-4919-be4c-4e07fe7920ae.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "image 98"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage90",
+    "url": "https://www.figma.com/api/mcp/asset/ee45000a-2d1c-4ad1-b586-efa32a90eaed.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "image 90"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage99",
+    "url": "https://www.figma.com/api/mcp/asset/6f6196f4-19ea-41e0-a3be-a38307c9949c.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "image 99"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage95",
+    "url": "https://www.figma.com/api/mcp/asset/9e1ad7e1-39b5-47c6-a6a7-fc2886d352ab.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "image 95"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage100",
+    "url": "https://www.figma.com/api/mcp/asset/5d3d1aff-dee2-4a1f-a6d0-a90de3a6cb14.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "image 100"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage97",
+    "url": "https://www.figma.com/api/mcp/asset/333d7734-1d6b-4492-85d6-538b0f05b82a.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "image 97"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage101",
+    "url": "https://www.figma.com/api/mcp/asset/11ffee64-e714-4a86-8fab-d84f93b77446.png",
+    "sections": [
+      "3-gallery"
+    ],
+    "figmaNames": [
+      "image 101"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgVector105",
+    "url": "https://www.figma.com/api/mcp/asset/de9d675c-fe34-4341-899d-43f4904d4281.png",
+    "sections": [
+      "2-halls"
+    ],
+    "figmaNames": [
+      "2. выбери зал"
+    ],
+    "count": 1
+  },
+  {
+    "const": "img341",
+    "url": "https://www.figma.com/api/mcp/asset/3bb948cb-ccf3-48b6-b71f-5bd68f238076.png",
+    "sections": [
+      "2-halls"
+    ],
+    "figmaNames": [
+      "Кожевенная линия 34 — без фона 1"
+    ],
+    "count": 1
+  },
+  {
+    "const": "img151",
+    "url": "https://www.figma.com/api/mcp/asset/2378572f-64b7-4015-9796-0bb1eb433469.png",
+    "sections": [
+      "2-halls"
+    ],
+    "figmaNames": [
+      "Профессора Качалова 15А — без фона 1"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage4",
+    "url": "https://www.figma.com/api/mcp/asset/e9f2eb27-c7b3-4a16-9567-151602812f41.png",
+    "sections": [
+      "2-halls"
+    ],
+    "figmaNames": [
+      "image 4"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImage83",
+    "url": "https://www.figma.com/api/mcp/asset/85c5e7e5-6d99-48dc-8265-15a4860a4c40.png",
+    "sections": [
+      "2-halls"
+    ],
+    "figmaNames": [
+      "image 83"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgUnion",
+    "url": "https://www.figma.com/api/mcp/asset/a97fe9b8-ec71-4596-b279-e0591f1c995a.svg",
+    "sections": [
+      "1-hero"
+    ],
+    "figmaNames": [
+      "Union"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgUnion1",
+    "url": "https://www.figma.com/api/mcp/asset/a9c6ba62-e0ad-4ec4-aff1-7d16918e0c09.svg",
+    "sections": [
+      "1-hero"
+    ],
+    "figmaNames": [
+      "Union"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgImgTelegram",
+    "url": "https://www.figma.com/api/mcp/asset/1897d137-74e8-40cb-9fa8-5ea539ce90ae.svg",
+    "sections": [
+      "1-hero"
+    ],
+    "figmaNames": [
+      "Img - Telegram"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgMaxSvg",
+    "url": "https://www.figma.com/api/mcp/asset/cb58de0e-27b0-4e16-8100-bac6336573a6.svg",
+    "sections": [
+      "1-hero"
+    ],
+    "figmaNames": [
+      "max.svg"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgGoodPlace20264X1",
+    "url": "https://www.figma.com/api/mcp/asset/94f7d510-7832-4fb3-9da8-74e185a36300.png",
+    "sections": [
+      "1-hero"
+    ],
+    "figmaNames": [
+      "good_place_2026_4x 1"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgVector3",
+    "url": "https://www.figma.com/api/mcp/asset/c40d8865-3a40-45ad-8e1d-8eeded006bdb.svg",
+    "sections": [
+      "1-hero"
+    ],
+    "figmaNames": [
+      "Vector"
+    ],
+    "count": 1
+  },
+  {
+    "const": "imgVector4",
+    "url": "https://www.figma.com/api/mcp/asset/b70c0473-4a43-4bd6-983d-94ced7da4779.svg",
+    "sections": [
+      "1-hero"
+    ],
+    "figmaNames": [
+      "Vector"
+    ],
+    "count": 1
+  }
+]

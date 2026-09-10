@@ -1,0 +1,16 @@
+import { chromium } from "playwright";
+const OUT = process.argv[2];
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
+await page.emulateMedia({ reducedMotion: "reduce" });
+await page.goto("http://localhost:3000", { waitUntil: "load" });
+await page.evaluate(() => document.fonts.ready);
+await page.locator("#faq").scrollIntoViewIfNeeded();
+await page.waitForTimeout(600);
+const list = page.locator("#faq details").first().locator("xpath=..");
+await page.locator("#faq details").nth(Number(process.argv[3] ?? 3)).locator("summary").click();
+await page.locator("#faq details").nth(5).hover();
+await page.waitForTimeout(400);
+await list.screenshot({ path: `${OUT}/faq-open${process.argv[3] ?? 3}.png` });
+await browser.close();
+console.log("готово");

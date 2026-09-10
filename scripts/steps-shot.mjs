@@ -1,0 +1,27 @@
+import { chromium } from "playwright";
+const OUT = process.argv[2];
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
+await page.emulateMedia({ reducedMotion: "reduce" });
+await page.goto("http://localhost:3000", { waitUntil: "load" });
+await page.evaluate(() => document.fonts.ready);
+const card = page.locator('[data-node-id="914:1880"]');
+await page.locator("#how").scrollIntoViewIfNeeded();
+await page.evaluate(() => new Promise((res) => { const p=[...document.images].filter(i=>!i.complete); if(!p.length) return res(); let n=p.length; const d=()=>--n===0&&res(); p.forEach(i=>{i.addEventListener('load',d,{once:true});i.addEventListener('error',d,{once:true})}); setTimeout(res,8000); }));
+await page.waitForTimeout(500);
+const clip = async (name) => {
+  const b = await card.boundingBox();
+  await page.screenshot({ path: `${OUT}/${name}`, clip: { x: b.x - 34, y: b.y - 46, width: b.width + 70, height: b.height + 110 } });
+};
+await clip("steps-empty.png");
+await page.evaluate(() => document.querySelectorAll('[data-node-id="914:1777"] button')[0].click());
+await page.evaluate(() => [...document.querySelectorAll('#price .u-day')].find((b) => !b.disabled).click());
+await page.selectOption("#hall", "Фламинго");
+await page.fill("#name", "Лада");
+await page.type("#phone", "9161234567", { delay: 3 });
+await page.click('#contact button[type="submit"]');
+await page.locator("#how").scrollIntoViewIfNeeded();
+await page.waitForTimeout(600);
+await clip("steps-full.png");
+await browser.close();
+console.log("готово");
